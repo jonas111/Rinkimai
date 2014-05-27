@@ -4,5 +4,12 @@
     <string name="app_name">Rinkimai</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
-
+	<string-array name = "arrs">
+	    <item>vienas</item>
+	    <item>du</item>
+	    <item>trys</item>
+	    
+	</string-array>
+	
 </resources>
+

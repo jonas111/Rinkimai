@@ -10,7 +10,12 @@
         android:layout_height="wrap_content"
         android:text="@string/hello_world" />
     
-    
+    <Button 
+        android:id="@+id/toVote"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="toVote"
+        />
     
     
 </LinearLayout>

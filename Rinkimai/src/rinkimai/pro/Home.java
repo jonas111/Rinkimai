@@ -3,14 +3,28 @@ package rinkimai.pro;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
+import android.app.Activity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.os.Build;
+public class Home extends Activity
+{
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		// TODO Auto-generated method stub
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.layout_home);
+		
+		
+	}
+}
 
+/*
 public class Home extends ActionBarActivity {
 
     @Override
@@ -49,6 +63,7 @@ public class Home extends ActionBarActivity {
     /**
      * A placeholder fragment containing a simple view.
      */
+/*
     public static class PlaceholderFragment extends Fragment {
 
         public PlaceholderFragment() {
@@ -63,3 +78,4 @@ public class Home extends ActionBarActivity {
     }
 
 }
+*/

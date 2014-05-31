@@ -31,8 +31,8 @@ public class Home extends Activity
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				
-				Intent voteIntent = new Intent(getBaseContext(), Vote.class);
-				startActivity(voteIntent);
+//				Intent voteIntent = new Intent(getBaseContext(), Vote.class);
+//				startActivity(voteIntent);
 			}
 		});
 	}

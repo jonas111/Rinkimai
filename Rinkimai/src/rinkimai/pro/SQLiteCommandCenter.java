@@ -24,16 +24,11 @@ public class SQLiteCommandCenter extends SQLiteOpenHelper
 	private Context context;
 	private JSONObject json ;
 	private SQLiteDatabase db;
-	private String[] urls = 
-		{
-			"http://rinkimai2014.coxslot.com/webservisas/balsavimai.php"
-		};
+	
 	
 	// konstruktorius nereikalingas, inicializacijua bus statinis metodas
-	public void SQLiteCommandCenterInit(Context context) 
-	{	
-		this.context = context;
-		
+	public void SQLiteCommandCenterInit() 
+	{		
 		db = createdbIfNotExists();
 		createTables(db);
 		
@@ -87,7 +82,7 @@ public class SQLiteCommandCenter extends SQLiteOpenHelper
 	//konstruktorius tam kad DatabaseHelperis grazintu duomenu baze, kitaip neiseina
 	public SQLiteCommandCenter(Context context) {
 		super(context, "Mmusu.db", null, 1);
-		SQLiteCommandCenterInit(context);
+		this.context = context;
 	}
 	
 	// palygina lenteliu dydzius, 
@@ -115,7 +110,7 @@ public class SQLiteCommandCenter extends SQLiteOpenHelper
 	//kurai db jei neegzistuoja
 	private SQLiteDatabase createdbIfNotExists()
 	{
-		SQLiteCommandCenter qc = new SQLiteCommandCenter(context);
+		SQLiteCommandCenter qc = this;
 		SQLiteDatabase db = qc.getReadableDatabase();
 		
 		return db;

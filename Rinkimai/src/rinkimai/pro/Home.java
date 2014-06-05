@@ -51,7 +51,7 @@ public class Home extends Activity implements OnClickListener
 		setContentView(R.layout.layout_home);
 		
 		
-		new SQLiteCommandCenter(getApplicationContext());
+		new SQLiteCommandCenter(getApplicationContext()).SQLiteCommandCenterInit();;
 		
 		
 		// setup input fields

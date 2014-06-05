@@ -28,7 +28,7 @@ public class Home extends Activity implements OnClickListener
 {
 	private EditText email, pass;
 	private Button mSubmit, mRegister;
-//testas 
+//testas 1
 	// Progress Dialog
 	private ProgressDialog pDialog;
 

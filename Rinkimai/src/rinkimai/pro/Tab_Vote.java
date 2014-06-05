@@ -69,9 +69,9 @@ public class Tab_Vote extends Activity {
 	 public void updateJSONdata() {
 	    	
 	        balsavimuSarasas = new ArrayList<HashMap<String, String>>();
-	        JSONParser jParser = new JSONParser();
+	        //JSONParser jParser = new JSONParser();
 	        
-	        JSONObject json = jParser.getJSONFromUrl(URL);
+	        JSONObject json = JSONParser.getJSONFromUrl(URL);
 	      
 	        try {
 	            

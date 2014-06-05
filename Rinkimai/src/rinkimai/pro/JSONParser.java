@@ -32,8 +32,8 @@ public class JSONParser {
  
     }
     
-    
-    public JSONObject getJSONFromUrl(final String url) {
+    // padariau static kad nereiketu objektu kurinet veltui
+    public static JSONObject getJSONFromUrl(final String url) {
 
         // Making HTTP request
         try {

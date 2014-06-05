@@ -49,7 +49,11 @@ public class Home extends Activity implements OnClickListener
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.layout_home);
-
+		
+		
+//		new SQLiteCommandCenter(getApplicationContext());
+		
+		
 		// setup input fields
 		email = (EditText) findViewById(R.id.username);
 		pass = (EditText) findViewById(R.id.password);

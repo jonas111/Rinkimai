@@ -8,6 +8,7 @@
         android:minSdkVersion="8"
         android:targetSdkVersion="19" />
     <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
 
     <application
         android:allowBackup="true"
@@ -32,6 +33,13 @@
         <activity android:name="variantai"></activity>
         <activity android:name="info"></activity>
         <activity android:name="Register"></activity>
+        
+        <receiver android:name="rinkimai.pro.SQLiteCommandCenter$NetworkStatusListener"
+          android:label="NetworkConnection">
+  			<intent-filter>
+    			<action android:name="android.net.conn.CONNECTIVITY_CHANGE"/>
+  			</intent-filter>
+		</receiver>
         
     </application>
 

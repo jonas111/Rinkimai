@@ -8,12 +8,16 @@ import org.json.JSONObject;
 
 import com.google.gson.JsonObject;
 
+import android.content.BroadcastReceiver;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteDatabase.CursorFactory;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.util.JsonReader;
 import android.widget.Toast;
 
@@ -30,6 +34,9 @@ public class SQLiteCommandCenter extends SQLiteOpenHelper
 	{		
 		db = createdbIfNotExists();
 		createTables(db);
+		
+		NetworkStatusListener nl = new NetworkStatusListener();
+		
 
 		checkBalsavimai();
 		checkBalasai();
@@ -59,9 +66,9 @@ public class SQLiteCommandCenter extends SQLiteOpenHelper
 			for (int i = 0; i < isWebo.length(); i++) {
 				JSONObject eilut = isWebo.getJSONObject(i);
 
-                ContentValues eilutesReiksmes = new ContentValues(4);
+                ContentValues eilutesReiksmes = new ContentValues(3);
                 
-                eilutesReiksmes.put("vart_id", eilut.getInt("vart_id"));
+                eilutesReiksmes.put("vart_id", eilut.getString("vart_id"));
                 eilutesReiksmes.put("bals_id",eilut.getInt("bals_id"));
                 eilutesReiksmes.put("ats_id", eilut.getInt("ats_id"));
                 
@@ -91,9 +98,10 @@ public class SQLiteCommandCenter extends SQLiteOpenHelper
 			for (int i = 0; i < isWebo.length(); i++) {
 				JSONObject eilut = isWebo.getJSONObject(i);
 
-                ContentValues eilutesReiksmes = new ContentValues(4);
+                ContentValues eilutesReiksmes = new ContentValues(3);
                 
                 eilutesReiksmes.put("id", eilut.getInt("id"));
+                eilutesReiksmes.put("var_id", eilut.getInt("var_id"));
                 eilutesReiksmes.put("info",eilut.getString("info"));
                 eilutesReiksmes.put("variantas", eilut.getString("variantas"));
                 
@@ -151,16 +159,21 @@ public class SQLiteCommandCenter extends SQLiteOpenHelper
 	// kuria lenteles jei neegzistuoja
 	private void createTables(SQLiteDatabase db) {
 		db.execSQL("CREATE TABLE IF NOT EXISTS balsai "+
-	"( vart_id int(11) NOT NULL, bals_id int(11) NOT NULL,"+
+	"( vart_id text NOT NULL,"
+	+ " bals_id int(11) NOT NULL,"+
 				" ats_id int(11) NOT NULL);");
 		
-		db.execSQL("CREATE TABLE IF NOT EXISTS balsavimai "+
-		"( id int(11), pavadinimas text NOT NULL,"+
-				" ikeltas datetime NOT NULL, pabaiga datetime NOT NULL) ; ");
+		db.execSQL("CREATE TABLE IF NOT EXISTS balsavimai ("
+				+ " id int(11),"
+		+ " pavadinimas text NOT NULL,"+
+				" ikeltas datetime NOT NULL,"
+				+ " pabaiga datetime NOT NULL) ; ");
 		
 		db.execSQL("CREATE TABLE IF NOT EXISTS variantai ("+
-		" id int(11) NOT NULL,  var_id int(11),"+
-				" info text NOT NULL,  variantas text NOT NULL) ");
+		" id int(11) NOT NULL, "
+		+ " var_id int(11),"+
+				" info text NOT NULL,  "
+				+ "variantas text NOT NULL) ");
 		
 	}
 	
@@ -182,6 +195,25 @@ public class SQLiteCommandCenter extends SQLiteOpenHelper
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 		// TODO Auto-generated method stub
 		
+	}
+	
+	public class NetworkStatusListener extends BroadcastReceiver
+	{
+	  @Override
+	  public void onReceive( Context context, Intent intent )
+	  {
+	    ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService( Context.CONNECTIVITY_SERVICE );
+	    NetworkInfo activeNetInfo = connectivityManager.getActiveNetworkInfo();
+	    NetworkInfo mobNetInfo = connectivityManager.getNetworkInfo(     ConnectivityManager.TYPE_MOBILE );
+	    if ( activeNetInfo != null )
+	    {
+	      Toast.makeText( context, "Active Network Type : " + activeNetInfo.getTypeName(), Toast.LENGTH_SHORT ).show();
+	    }
+	    if( mobNetInfo != null )
+	    {
+	      Toast.makeText( context, "Mobile Network Type : " + mobNetInfo.getTypeName(), Toast.LENGTH_SHORT ).show();
+	    }
+	  }
 	}
 	
 

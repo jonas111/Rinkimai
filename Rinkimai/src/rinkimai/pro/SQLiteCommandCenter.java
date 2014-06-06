@@ -25,28 +25,81 @@ public class SQLiteCommandCenter extends SQLiteOpenHelper
 	private JSONObject json ;
 	private SQLiteDatabase db;
 	
-	
-	// konstruktorius nereikalingas, inicializacijua bus statinis metodas
+	//duomenu baziu apdorojimo metodas
 	public void SQLiteCommandCenterInit() 
 	{		
 		db = createdbIfNotExists();
 		createTables(db);
-		
-
 
 		checkBalsavimai();
-		
-
-//			 String[] val = {"id"};
-//			 Cursor cur = db.query("balsavimai",null , (String)null, (String[])null, (String)null, (String)null, (String)null);
-//			cur.moveToFirst();
-//			 cur.moveToNext();
-//			 cur.moveToNext();
-//			 cur.moveToNext();
-			// cur.moveToNext();
-//			 Toast.makeText(context, String.valueOf(cur.), Toast.LENGTH_SHORT).show();
+		checkBalasai();
+		checkVariantai();
 	}
 	
+	private void checkBalasai() {
+		
+		if(!isOutterSameSizeAsInner("balsai"))
+		{
+			try {
+				balsaiJsonToSqlite();
+			} catch (Exception e) {
+				e.printStackTrace();
+				Toast.makeText(context, e.toString(), Toast.LENGTH_SHORT).show();
+			}
+		}
+		
+	}
+	private void balsaiJsonToSqlite() throws JSONException
+	{
+		String lentele = "balsai";
+			JSONArray isWebo = json.getJSONArray("posts");
+
+			db.delete(lentele, null, null);
+
+			for (int i = 0; i < isWebo.length(); i++) {
+				JSONObject eilut = isWebo.getJSONObject(i);
+
+                ContentValues eilutesReiksmes = new ContentValues(4);
+                
+                eilutesReiksmes.put("vart_id", eilut.getInt("vart_id"));
+                eilutesReiksmes.put("bals_id",eilut.getInt("bals_id"));
+                eilutesReiksmes.put("ats_id", eilut.getInt("ats_id"));
+                
+                db.insert(lentele, null, eilutesReiksmes);   
+				}
+	}
+	private void checkVariantai() {
+		
+		if(!isOutterSameSizeAsInner("variantai"))
+		{
+			try {
+				variantaiJsonToSqlite();
+			} catch (Exception e) {
+				e.printStackTrace();
+				Toast.makeText(context, e.toString(), Toast.LENGTH_SHORT).show();
+			}
+		}
+		
+	}
+	private void variantaiJsonToSqlite() throws JSONException
+	{
+		String lentele = "variantai";
+			JSONArray isWebo = json.getJSONArray("posts");
+
+			db.delete(lentele, null, null);
+
+			for (int i = 0; i < isWebo.length(); i++) {
+				JSONObject eilut = isWebo.getJSONObject(i);
+
+                ContentValues eilutesReiksmes = new ContentValues(4);
+                
+                eilutesReiksmes.put("id", eilut.getInt("id"));
+                eilutesReiksmes.put("info",eilut.getString("info"));
+                eilutesReiksmes.put("variantas", eilut.getString("variantas"));
+                
+                db.insert(lentele, null, eilutesReiksmes);   
+				}
+	}
 	private void checkBalsavimai() {
 		if(!isOutterSameSizeAsInner("balsavimai"))
 		{
@@ -59,7 +112,6 @@ public class SQLiteCommandCenter extends SQLiteOpenHelper
 		}
 		
 	}
-	
 	private void balsavimaiJsonToSqlite() throws JSONException
 	{
 			JSONArray isWebo = json.getJSONArray("posts");
@@ -103,15 +155,21 @@ public class SQLiteCommandCenter extends SQLiteOpenHelper
 				" ats_id int(11) NOT NULL);");
 		
 		db.execSQL("CREATE TABLE IF NOT EXISTS balsavimai "+
-		"( id INTEGER PRIMARY KEY AUTOINCREMENT, pavadinimas text NOT NULL,"+
+		"( id int(11), pavadinimas text NOT NULL,"+
 				" ikeltas datetime NOT NULL, pabaiga datetime NOT NULL) ; ");
+		
+		db.execSQL("CREATE TABLE IF NOT EXISTS variantai ("+
+		" id int(11) NOT NULL,  var_id int(11),"+
+				" info text NOT NULL,  variantas text NOT NULL) ");
+		
 	}
 	
 	//kurai db jei neegzistuoja
 	private SQLiteDatabase createdbIfNotExists()
 	{
 		SQLiteCommandCenter qc = this;
-		SQLiteDatabase db = qc.getReadableDatabase();
+		// metodas arba kuria arba atidaro db kuria nurodome commandcenter superio konstruktoriuje
+		SQLiteDatabase db = qc.getReadableDatabase(); 
 		
 		return db;
 	}

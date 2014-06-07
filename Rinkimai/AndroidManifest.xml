@@ -34,12 +34,6 @@
         <activity android:name="info"></activity>
         <activity android:name="Register"></activity>
         
-        <receiver android:name="rinkimai.pro.SQLiteCommandCenter$NetworkStatusListener"
-          android:label="NetworkConnection">
-  			<intent-filter>
-    			<action android:name="android.net.conn.CONNECTIVITY_CHANGE"/>
-  			</intent-filter>
-		</receiver>
         
     </application>
 

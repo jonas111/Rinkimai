@@ -49,13 +49,15 @@ public class Home extends Activity implements OnClickListener
 	private static final String TAG_SUCCESS = "success";
 	private static final String TAG_MESSAGE = "message";
 
+	public static SQLiteCommandCenter dbcontroller ;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.layout_home);
 		
-		new SQLiteCommandCenter(getApplicationContext()).SQLiteCommandCenterInit();
+		dbcontroller =	new SQLiteCommandCenter(getApplicationContext());
+		dbcontroller.SQLiteCommandCenterInit();
 
 //		Thread thread = new Thread(new Runnable(){
 //		    @Override

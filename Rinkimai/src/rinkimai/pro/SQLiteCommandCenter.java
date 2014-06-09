@@ -7,6 +7,7 @@ import org.json.JSONObject;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.widget.Toast;
@@ -18,41 +19,45 @@ public class SQLiteCommandCenter extends SQLiteOpenHelper
 	private Context context;
 	private JSONObject json ;
 	private SQLiteDatabase db;
+	private int userId;  //      kazkaip patraukt userio id
 	
 	//duomenu baziu apdorojimo metodas
 	public void SQLiteCommandCenterInit() 
 	{		
 		db = createdbIfNotExists();
 		createTables(db);
-		
 
-		try
-		{
+		sinchronizuojaLenteles();
+	}
+	
+	public void vidinisBalsavimas(String id, String varId)
+	{
+        ContentValues eilutesReiksmes = new ContentValues(3);
+        
+        eilutesReiksmes.put("vart_id","as");
+        eilutesReiksmes.put("bals_id", id);
+        eilutesReiksmes.put("ats_id",varId);
+        db.delete("balsai", null, null);
+        db.insert("balsai", null, eilutesReiksmes);   
+		
+        Cursor cur = db.query("balsai", null, (String)null, (String[])null, (String)null, (String)null, (String)null);
+        cur.moveToNext();
+
+        Toast.makeText(context, cur.getString(0)+" "+cur.getString(1)+" "+cur.getString(2), Toast.LENGTH_LONG).show();
+	}
+	
+	private void sinchronizuojaLenteles() {
+		try{
 			checkBalsavimai();
 		}
-		catch(Exception e)
-		{
-			// HOHY NO0RS HANDLERI, PER NAUJA PALEISTU TASKA JAI EXEPTIONAS, ARBA LAUKTU SALYGU
+		catch(Exception e){
+			// KOKY NO0RS HANDLERI, PER NAUJA PALEISTU TASKA JAI EXEPTIONAS, ARBA LAUKTU SALYGU
 		}
-		try
-		{
-			checkBalasai();
-		}
-		catch(Exception e)
-		{
-			
-		}
-		
-		try
-		{
+		try{
 			checkVariantai();
 		}
-		catch(Exception e)
-		{
-			
+		catch(Exception e){
 		}
-		
-		
 	}
 	
 	private void checkBalasai() {
@@ -63,7 +68,6 @@ public class SQLiteCommandCenter extends SQLiteOpenHelper
 				balsaiJsonToSqlite();
 			} catch (Exception e) {
 				e.printStackTrace();
-			
 			}
 		}
 		
@@ -95,7 +99,6 @@ public class SQLiteCommandCenter extends SQLiteOpenHelper
 				variantaiJsonToSqlite();
 			} catch (Exception e) {
 				e.printStackTrace();
-			
 			}
 		}
 		
@@ -127,10 +130,8 @@ public class SQLiteCommandCenter extends SQLiteOpenHelper
 				balsavimaiJsonToSqlite();
 			} catch (Exception e) {
 				e.printStackTrace();
-				
 			}
 		}
-		
 	}
 	private void balsavimaiJsonToSqlite() throws JSONException
 	{
@@ -161,12 +162,10 @@ public class SQLiteCommandCenter extends SQLiteOpenHelper
 	// String : lenteles pavadinimas, taippat php failo pavadinimas
 	private boolean isOutterSameSizeAsInner(String tablename)
 	{
-		try
-		{
+		try{
 			json = JSONParser.getJSONFromUrl("http://rinkimai2014.coxslot.com/webservisas/"+tablename+".php");
 		}
-		catch(Exception e)
-		{
+		catch(Exception e){
 			
 		}
 		if(json.length() == db.query(tablename, null, (String)null, (String[])null, (String)null, (String)null, (String)null).getCount()){

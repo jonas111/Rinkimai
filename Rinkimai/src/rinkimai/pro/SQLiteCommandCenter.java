@@ -32,7 +32,7 @@ public class SQLiteCommandCenter extends SQLiteOpenHelper
 		}
 		catch(Exception e)
 		{
-			Toast.makeText(context, e.toString()+" balsavimai", Toast.LENGTH_LONG).show();;
+			// HOHY NO0RS HANDLERI, PER NAUJA PALEISTU TASKA JAI EXEPTIONAS, ARBA LAUKTU SALYGU
 		}
 		try
 		{
@@ -40,7 +40,7 @@ public class SQLiteCommandCenter extends SQLiteOpenHelper
 		}
 		catch(Exception e)
 		{
-			Toast.makeText(context, e.toString()+" balsai", Toast.LENGTH_LONG).show();
+			
 		}
 		
 		try
@@ -49,7 +49,7 @@ public class SQLiteCommandCenter extends SQLiteOpenHelper
 		}
 		catch(Exception e)
 		{
-			Toast.makeText(context, e.toString()+" variantai", Toast.LENGTH_LONG).show();
+			
 		}
 		
 		
@@ -63,7 +63,7 @@ public class SQLiteCommandCenter extends SQLiteOpenHelper
 				balsaiJsonToSqlite();
 			} catch (Exception e) {
 				e.printStackTrace();
-				Toast.makeText(context, e.toString(), Toast.LENGTH_SHORT).show();
+			
 			}
 		}
 		
@@ -95,7 +95,7 @@ public class SQLiteCommandCenter extends SQLiteOpenHelper
 				variantaiJsonToSqlite();
 			} catch (Exception e) {
 				e.printStackTrace();
-				Toast.makeText(context, e.toString(), Toast.LENGTH_SHORT).show();
+			
 			}
 		}
 		
@@ -127,7 +127,7 @@ public class SQLiteCommandCenter extends SQLiteOpenHelper
 				balsavimaiJsonToSqlite();
 			} catch (Exception e) {
 				e.printStackTrace();
-				Toast.makeText(context, e.toString(), Toast.LENGTH_SHORT).show();
+				
 			}
 		}
 		
@@ -167,7 +167,7 @@ public class SQLiteCommandCenter extends SQLiteOpenHelper
 		}
 		catch(Exception e)
 		{
-			Toast.makeText(context, e.toString()+" 1", Toast.LENGTH_LONG).show();
+			
 		}
 		if(json.length() == db.query(tablename, null, (String)null, (String[])null, (String)null, (String)null, (String)null).getCount()){
 			return true;
@@ -193,7 +193,6 @@ public class SQLiteCommandCenter extends SQLiteOpenHelper
 		+ " var_id int(11),"+
 				" info text NOT NULL,  "
 				+ "variantas text NOT NULL) ");
-		
 	}
 	
 	//kurai db jei neegzistuoja
@@ -202,7 +201,6 @@ public class SQLiteCommandCenter extends SQLiteOpenHelper
 		SQLiteCommandCenter qc = this;
 		// metodas arba kuria arba atidaro db kuria nurodome commandcenter superio konstruktoriuje
 		SQLiteDatabase db = qc.getReadableDatabase(); 
-		
 		return db;
 	}
 	@Override

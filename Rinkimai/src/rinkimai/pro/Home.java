@@ -55,8 +55,23 @@ public class Home extends Activity implements OnClickListener
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.layout_home);
 		
-		
 		new SQLiteCommandCenter(getApplicationContext()).SQLiteCommandCenterInit();
+
+//		Thread thread = new Thread(new Runnable(){
+//		    @Override
+//		    public void run() {
+//		        try {
+//		            
+//		        	new SQLiteCommandCenter(getApplicationContext()).SQLiteCommandCenterInit();
+//		        	
+//		        } catch (Exception e) {
+//		            e.printStackTrace();
+//		        }
+//		    }
+//		});
+//
+//		thread.start(); 
+		
 //		BroadcastReceiver networkStateReceiver = new BroadcastReceiver() {
 //		    @Override
 //		    public void onReceive(Context context, Intent intent) {

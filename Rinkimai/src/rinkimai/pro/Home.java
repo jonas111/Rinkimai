@@ -144,7 +144,7 @@ public class Home extends Activity implements OnClickListener
 			int success;
 			String username = email.getText().toString();
 			String password = pass.getText().toString();
-			thisUser = username;
+			
 			try {
 				// Building Parameters
 				List<NameValuePair> params = new ArrayList<NameValuePair>();
@@ -164,6 +164,7 @@ public class Home extends Activity implements OnClickListener
 				if (success == 1) {
 					Log.d("Login Successful!", json.toString());
 					// save user data
+					thisUser = username;
 					SharedPreferences sp = PreferenceManager
 							.getDefaultSharedPreferences(Home.this);
 					Editor edit = sp.edit();

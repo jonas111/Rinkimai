@@ -54,7 +54,7 @@ public class variantai extends Activity {
         backBtn();
     }
 	 
-	 public void CreateList(final String text, final String info){
+	 public void CreateList(final String text, final String info, final String id){
 			
 			LinearLayout panele = (LinearLayout) findViewById(R.id.panele2);
 			Button bt = new Button(getApplicationContext());
@@ -92,7 +92,8 @@ public class variantai extends Activity {
 	                String info = c.getString(INFO);
 	                String variantas = c.getString(VARIANTAS);
 	                String id = c.getString(ID);
-	                
+	                String var_id = c.getString("var_id");
+	                              
 
 	                // creating new HashMap
 	                HashMap<String, String> map = new HashMap<String, String>();
@@ -101,6 +102,7 @@ public class variantai extends Activity {
 	                map.put(INFO, info);
 	                map.put(VARIANTAS, variantas);
 	                map.put(ID, id);
+	                map.put("var_id", var_id);
 	             
 	                // adding HashList to ArrayList
 	                variantuSarasas.add(map);
@@ -118,7 +120,8 @@ public class variantai extends Activity {
 			 String a = variantuSarasas.get(i).get(VARIANTAS);
 			 String b = variantuSarasas.get(i).get(INFO);
 			 String c = variantuSarasas.get(i).get(ID);
-			 if(c.equals(id)) CreateList(a, b);
+			 String d = variantuSarasas.get(i).get("var_id");
+			 if(c.equals(id)) CreateList(a, b, d);
 		 }
 	 }
 	 

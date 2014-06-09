@@ -166,9 +166,7 @@ public class info extends Activity {
 	                success = json.getInt(TAG_SUCCESS);
 	                if (success == 1) {
 	                	Log.d("Voted!", json.toString()); 
-	                	//finish();
-	                	//Button b = (Button) findViewById(R.id.vote);
-	                	//b.setEnabled(false);
+	                	
 	                	return json.getString(TAG_MESSAGE);
 	                }else{
 	                	Log.d("Voting Fail!", json.getString(TAG_MESSAGE));

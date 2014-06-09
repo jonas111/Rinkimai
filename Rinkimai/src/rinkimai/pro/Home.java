@@ -10,9 +10,14 @@ import org.json.JSONObject;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -49,11 +54,28 @@ public class Home extends Activity implements OnClickListener
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.layout_home);
-
-
-		new SQLiteCommandCenter(getApplicationContext()).SQLiteCommandCenterInit();;
-
-
+		
+		
+		new SQLiteCommandCenter(getApplicationContext()).SQLiteCommandCenterInit();
+//		BroadcastReceiver networkStateReceiver = new BroadcastReceiver() {
+//		    @Override
+//		    public void onReceive(Context context, Intent intent) {
+////		        Toast.makeText(getApplicationContext(), "Network Listener"+" Network Type Changed", Toast.LENGTH_LONG).show();
+//		        ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService( Context.CONNECTIVITY_SERVICE );
+//		        NetworkInfo activeNetInfo = connectivityManager.getActiveNetworkInfo();
+//		        NetworkInfo mobNetInfo = connectivityManager.getNetworkInfo(     ConnectivityManager.TYPE_MOBILE );
+//		        if ( activeNetInfo != null && mobNetInfo != null)
+//		        {
+//			        Toast.makeText(getApplicationContext(), "Network Listener"+" Network Type Changed", Toast.LENGTH_LONG).show();
+//
+//		        }
+//		    }
+//		};
+//
+//		IntentFilter filter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);        
+//		registerReceiver(networkStateReceiver, filter);
+			
+		
 		// setup input fields
 		email = (EditText) findViewById(R.id.username);
 		pass = (EditText) findViewById(R.id.password);
@@ -128,7 +150,7 @@ public class Home extends Activity implements OnClickListener
 					Editor edit = sp.edit();
 					edit.putString("email", username);
 					edit.commit();
-
+					
 					Intent i = new Intent(Home.this, MainTabs.class);
 					finish();
 					startActivity(i);

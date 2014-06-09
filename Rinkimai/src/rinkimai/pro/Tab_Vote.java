@@ -28,6 +28,7 @@ public class Tab_Vote extends Activity {
     private static final String PAVADINIMAS = "pavadinimas";
     private static final String IKELTAS = "ikeltas";
     private static final String PABAIGA = "pabaiga";
+    public static String balsId;
     
     private JSONArray balsavimai = null;
     private ArrayList<HashMap<String, String>> balsavimuSarasas;
@@ -59,6 +60,7 @@ public class Tab_Vote extends Activity {
 		    	Intent intent = new Intent(Tab_Vote.this, variantai.class);
 		    	intent.putExtra("id", id);
 		    	intent.putExtra("pavadinimas", text);
+		    	balsId = id;
 		    	startActivityForResult(intent, 0);
 		    }
 		});

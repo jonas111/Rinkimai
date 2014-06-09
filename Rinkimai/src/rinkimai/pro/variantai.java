@@ -65,6 +65,7 @@ public class variantai extends Activity {
 			    	Intent intent = new Intent(variantai.this, info.class);
 			    	intent.putExtra("pavadinimas", text);
 			    	intent.putExtra("info", info);
+			    	intent.putExtra("ats_id", id);
 			    	startActivityForResult(intent, 0);
 			    }
 			});

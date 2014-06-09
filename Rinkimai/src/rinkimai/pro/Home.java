@@ -32,8 +32,9 @@ import android.widget.Toast;
 public class Home extends Activity implements OnClickListener 
 {
 	private EditText email, pass;
+	public static String thisUser;
 	private Button mSubmit, mRegister;
-//testas 12
+
 	// Progress Dialog
 	private ProgressDialog pDialog;
 
@@ -143,6 +144,7 @@ public class Home extends Activity implements OnClickListener
 			int success;
 			String username = email.getText().toString();
 			String password = pass.getText().toString();
+			thisUser = username;
 			try {
 				// Building Parameters
 				List<NameValuePair> params = new ArrayList<NameValuePair>();

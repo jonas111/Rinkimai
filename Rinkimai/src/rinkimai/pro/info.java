@@ -2,10 +2,12 @@ package rinkimai.pro;
 
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -34,25 +36,31 @@ public class info extends Activity {
 		 
 	    // JSON parser class
 	    JSONParser jsonParser = new JSONParser();
-	    
-	    //php register script
-	    
-	    
+	        
 	    //linkas y php failiuka kuris perduoda duomenis y DB:
-	    private static final String REGISTER_URL = "http://rinkimai2014.coxslot.com/webservisas/vote.php";
-	       
+	    private static final String VOTE_URL = "http://rinkimai2014.coxslot.com/webservisas/vote.php";
+	    //linkas patraukti vartotoju duomenis
+		private static final String URL = "http://rinkimai2014.coxslot.com/webservisas/vartotojai.php";
+ 
+	    
 	    //Json tagai
 	    private static final String TAG_SUCCESS = "success";
 	    private static final String TAG_MESSAGE = "message";
 	    /*Kintamasis isgauti esama vartotoja is Home klases (ten issaugojamas  
 	     *statiniame kintamajame prisijungiant) Paspaudus vote keliauja y db*/
 	    private String username = Home.thisUser;
+	    private String var_id;
 	    /*Kintamasis isgauti balsavima kuriame esu is Tab_Vote klases (ten issaugojamas  
 	     *statiniame kintamajame paspaudus ant pacio balsavimo)Paspaudus vote keliauja y db*/
 	    private String balsavimas = Tab_Vote.balsId;
 	    /*Kintamasis isgauti kuri varianta pasirinkome(uzpildymas bus veliau)*/
 	    private String variantas;
 	    //private Button b = (Button) findViewById(R.id.vote);
+	    
+	    private JSONArray juserid = null;
+	    
+	    private static final String POSTS = "posts";
+
 	
 	
 	 public void onCreate(Bundle savedInstanceState) { 
@@ -141,6 +149,7 @@ public class info extends Activity {
 			protected String doInBackground(String... args) {
 				// TODO Auto-generated method stub
 				 // Check for success tag
+				updateJSONdata();
 	            int success;
 	           
 	            try {
@@ -148,7 +157,7 @@ public class info extends Activity {
 	                List<NameValuePair> params = new ArrayList<NameValuePair>();
 	                /* taip duomenys siunciami y php failiuka kuris nusius juos
 	                 * y DB*/
-	                params.add(new BasicNameValuePair("vart_id", username));
+	                params.add(new BasicNameValuePair("vart_id", var_id));
 	                params.add(new BasicNameValuePair("bals_id", balsavimas));
 	                params.add(new BasicNameValuePair("ats_id", variantas));
 	                
@@ -157,7 +166,7 @@ public class info extends Activity {
 	                
 	                //Posting user data to script 
 	                JSONObject json = jsonParser.makeHttpRequest(
-	                       REGISTER_URL, "POST", params);
+	                       VOTE_URL, "POST", params);
 	 
 	                // full json response
 	                Log.d("Pabalsuota!", json.toString());
@@ -191,6 +200,29 @@ public class info extends Activity {
 	        }
 			
 		}
+	 
+	 public void updateJSONdata() {
+	    	
+	       	        
+	        JSONObject json = JSONParser.getJSONFromUrl(URL);
+	      
+	        try {
+	            
+	            juserid = json.getJSONArray(POSTS);
+
+	            // looping through all posts according to the json object returned
+	            for (int i = 0; i < juserid.length(); i++) {
+	                JSONObject c = juserid.getJSONObject(i);
+
+	                if(c.getString("email").equals(username))
+	                var_id = c.getString("user_id");
+	                              
+	            }
+
+	        } catch (JSONException e) {
+	            e.printStackTrace();
+	        }
+	    }
 	 
 
 

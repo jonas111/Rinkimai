@@ -28,7 +28,7 @@
         <activity android:name="Tab_Home"></activity>
         <activity android:name="Tab_Vote"></activity>
         <activity android:name="Tab_Info"></activity>
-        <activity android:name="Tab_Stats"></activity>
+       <activity android:name="Tab_Stats"></activity>
         <activity android:name="Tab_Me"></activity>
         <activity android:name="variantai"></activity>
         <activity android:name="info"></activity>

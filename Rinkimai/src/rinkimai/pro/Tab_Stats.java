@@ -19,7 +19,7 @@ public class Tab_Stats extends Activity {
 		final WebView myWebView = (WebView) findViewById(R.id.webview); //sukuriamas laukas, kuris atvaizduoja web puslapi.
 		WebSettings webSettings = myWebView.getSettings(); //igalina nustatymus WebView klasei.
 		webSettings.setJavaScriptEnabled(true); //ijungia JavaScript.
-		myWebView.loadUrl("http://rinkimai2014.coxslot.com/webservisas/stats.php"); //atidaro stats.php
+		myWebView.loadUrl("http://rinkimai2014.coxslot.com/webservisas/gaga.php"); //atidaro stats.php
 		
 		myWebView.setWebViewClient(new WebViewClient(){ //myWebView implementacija.
 

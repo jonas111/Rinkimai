@@ -75,8 +75,10 @@ public class Tab_Vote extends Activity {
 	        
 	        JSONObject json = JSONParser.getJSONFromUrl(URL);
 	      
+	        
 	        try {
-	            
+	        	SQLiteCommandCenter.balsavimaiJsonToSqlite(json);
+	        	
 	            balsavimai = json.getJSONArray(POSTS);
 
 	            // looping through all posts according to the json object returned

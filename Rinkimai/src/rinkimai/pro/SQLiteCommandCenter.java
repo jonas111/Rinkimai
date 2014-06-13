@@ -225,7 +225,7 @@ public class SQLiteCommandCenter extends SQLiteOpenHelper
 		Cursor tmp2;
         for(int i = 0 ; i < ilgis ; i++)
         {
-        	if(ilgis<0)
+        	if(ilgis>0)
         	{
         	cur.moveToNext();
         	tmp = db.query("balsavimai", pavadinimas, "id = "+cur.getString(1), null, null, null, null);
@@ -233,9 +233,10 @@ public class SQLiteCommandCenter extends SQLiteOpenHelper
         	tmp2 = db.query("variantai", variantas, "id = "+cur.getString(2), null, null, null, null);
         	tmp2.moveToNext();
         	result.put(tmp.getString(1), tmp2.getString(0));
+        //	result.put("Pasaulio pabaiga", "rytoi");
         	}
         }
-		
+        result.put("Pasaulio pabaiga", "rytoi");
 		return result;
 	}
 	

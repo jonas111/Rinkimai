@@ -1001,10 +1001,10 @@ containing a value of this type.
         public static final int action_menu_divider=0x7f050016;
         public static final int action_menu_presenter=0x7f050017;
         public static final int action_mode_close_button=0x7f050024;
-        public static final int action_settings=0x7f050054;
+        public static final int action_settings=0x7f050057;
         public static final int activity_chooser_view_content=0x7f050025;
         public static final int always=0x7f05000b;
-        public static final int backB=0x7f050053;
+        public static final int backB=0x7f050056;
         public static final int back_b=0x7f05003d;
         public static final int beginning=0x7f050011;
         public static final int checkbox=0x7f05002d;
@@ -1027,13 +1027,14 @@ containing a value of this type.
         public static final int listMode=0x7f050001;
         public static final int list_item=0x7f050029;
         public static final int login=0x7f050043;
+        public static final int lv_history=0x7f050051;
         public static final int middle=0x7f050012;
         public static final int name=0x7f05004b;
         public static final int never=0x7f050009;
         public static final int none=0x7f050010;
         public static final int normal=0x7f050000;
-        public static final int panele=0x7f050051;
-        public static final int panele2=0x7f050052;
+        public static final int panele=0x7f050054;
+        public static final int panele2=0x7f050055;
         public static final int panele3=0x7f05003e;
         public static final int panele4=0x7f05003c;
         public static final int password=0x7f050044;
@@ -1064,13 +1065,15 @@ containing a value of this type.
         public static final int textView2=0x7f050045;
         public static final int title=0x7f05002b;
         public static final int top_action_bar=0x7f050020;
-        public static final int txt=0x7f050050;
+        public static final int tv_history=0x7f050050;
+        public static final int tv_name=0x7f05004f;
+        public static final int txt=0x7f050053;
         public static final int up=0x7f050021;
         public static final int useLogo=0x7f050003;
         public static final int username=0x7f050047;
         public static final int variantas=0x7f05003f;
         public static final int vote=0x7f050041;
-        public static final int webview=0x7f05004f;
+        public static final int webview=0x7f050052;
         public static final int withText=0x7f05000c;
     }
     public static final class integer {
@@ -1141,6 +1144,7 @@ containing a value of this type.
         public static final int home=0x7f0d0000;
     }
     public static final class string {
+        public static final int  balsavote_uz=0x7f0a0011;
         /**  Content description for the action bar "home" affordance. [CHAR LIMIT=NONE] 
          */
         public static final int abc_action_bar_home_description=0x7f0a0001;

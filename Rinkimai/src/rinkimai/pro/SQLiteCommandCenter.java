@@ -1,6 +1,8 @@
 package rinkimai.pro;
 
 
+import java.util.HashMap;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -212,7 +214,30 @@ public class SQLiteCommandCenter extends SQLiteOpenHelper
 		// TODO Auto-generated method stub
 		
 	}
-	
+	public HashMap<String,String> metodasArturui()
+	{
+		Cursor cur = db.query("balsai", null, (String)null, (String[])null, (String)null, (String)null, (String)null);
+		int ilgis = cur.getCount();
+		HashMap<String, String> result = new HashMap<String, String>();
+		String[] pavadinimas = {"pavadinimas"};
+		String[] variantas = {"variantas"};
+		Cursor tmp;
+		Cursor tmp2;
+        for(int i = 0 ; i < ilgis ; i++)
+        {
+        	if(ilgis<0)
+        	{
+        	cur.moveToNext();
+        	tmp = db.query("balsavimai", pavadinimas, "id = "+cur.getString(1), null, null, null, null);
+        	tmp.moveToNext();
+        	tmp2 = db.query("variantai", variantas, "id = "+cur.getString(2), null, null, null, null);
+        	tmp2.moveToNext();
+        	result.put(tmp.getString(1), tmp2.getString(0));
+        	}
+        }
+		
+		return result;
+	}
 	
 
 }

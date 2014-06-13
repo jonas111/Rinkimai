@@ -24,7 +24,6 @@ public class SQLiteCommandCenter extends SQLiteOpenHelper
 	{
 		Cursor cur = db.query("balsai", null, (String)null, (String[])null, (String)null, (String)null, (String)null);
 		int ilgis = cur.getCount();
-		Toast.makeText(context, cur.getColumnName(0) + cur.getCount(), Toast.LENGTH_LONG).show();
 		HashMap<String, String> result = new HashMap<String, String>();
 		String[] pavadinimas = {"pavadinimas"};
 		String[] variantas = {"variantas"};
@@ -36,11 +35,11 @@ public class SQLiteCommandCenter extends SQLiteOpenHelper
         	{
         	cur.moveToNext();
         	tmp = db.query("balsavimai", pavadinimas, "id = "+cur.getString(1), null, null, null, null);
-        	tmp = db.query("balsavimai", pavadinimas, null, null, null, null, null);
+        	Toast.makeText(context, cur.getColumnName(0) + cur.getString(0)+cur.getString(1)+cur.getString(2), Toast.LENGTH_LONG).show();
         	tmp.moveToNext();
-        	tmp2 = db.query("variantai", variantas, "id = "+cur.getString(2), null, null, null, null);
-        	tmp2.moveToNext();
-        	result.put(tmp.getString(1), tmp2.getString(0));
+//        	tmp2 = db.query("variantai", variantas, "id = "+cur.getString(2), null, null, null, null);
+//        	tmp2.moveToNext();
+        	result.put(tmp.getString(0), cur.getString(2));
         	}
         }
 		
@@ -48,7 +47,7 @@ public class SQLiteCommandCenter extends SQLiteOpenHelper
 	}
 	
 	
-	public void vidinisBalsavimas(String id, String varId)
+	public static void vidinisBalsavimas(String id, String varId)
 	{
         ContentValues eilutesReiksmes = new ContentValues(3);
         
@@ -149,31 +148,7 @@ public class SQLiteCommandCenter extends SQLiteOpenHelper
 		// TODO Auto-generated method stub
 		
 	}
-	public HashMap<String,String> metodasArturui()
-	{
-		Cursor cur = db.query("balsai", null, (String)null, (String[])null, (String)null, (String)null, (String)null);
-		int ilgis = cur.getCount();
-		HashMap<String, String> result = new HashMap<String, String>();
-		String[] pavadinimas = {"pavadinimas"};
-		String[] variantas = {"variantas"};
-		Cursor tmp;
-		Cursor tmp2;
-        for(int i = 0 ; i < ilgis ; i++)
-        {
-        	if(ilgis>0)
-        	{
-        	cur.moveToNext();
-        	tmp = db.query("balsavimai", pavadinimas, "id = "+cur.getString(1), null, null, null, null);
-        	tmp.moveToNext();
-        	tmp2 = db.query("variantai", variantas, "id = "+cur.getString(2), null, null, null, null);
-        	tmp2.moveToNext();
-        	result.put(tmp.getString(1), tmp2.getString(0));
-        //	result.put("Pasaulio pabaiga", "rytoi");
-        	}
-        }
-        result.put("Pasaulio pabaiga", "rytoi");
-		return result;
-	}
+	
 	
 
 }

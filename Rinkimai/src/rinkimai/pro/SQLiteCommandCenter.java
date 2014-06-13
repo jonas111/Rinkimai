@@ -18,19 +18,35 @@ import android.widget.Toast;
 
 public class SQLiteCommandCenter extends SQLiteOpenHelper
 {
-	private Context context;
-	private JSONObject json ;
-	private SQLiteDatabase db;
-	private int userId;  //      kazkaip patraukt userio id
+	private static SQLiteDatabase db;
 	
-	//duomenu baziu apdorojimo metodas
-	public void SQLiteCommandCenterInit() 
-	{		
-		db = createdbIfNotExists();
-		createTables(db);
-
-		sinchronizuojaLenteles();
+	public static HashMap<String,String> metodasArturui(Context context)
+	{
+		Cursor cur = db.query("balsai", null, (String)null, (String[])null, (String)null, (String)null, (String)null);
+		int ilgis = cur.getCount();
+		Toast.makeText(context, cur.getColumnName(0) + cur.getCount(), Toast.LENGTH_LONG).show();
+		HashMap<String, String> result = new HashMap<String, String>();
+		String[] pavadinimas = {"pavadinimas"};
+		String[] variantas = {"variantas"};
+		Cursor tmp;
+		Cursor tmp2;
+        for(int i = 0 ; i < ilgis ; i++)
+        {
+        	if(ilgis>0)
+        	{
+        	cur.moveToNext();
+        	tmp = db.query("balsavimai", pavadinimas, "id = "+cur.getString(1), null, null, null, null);
+        	tmp = db.query("balsavimai", pavadinimas, null, null, null, null, null);
+        	tmp.moveToNext();
+        	tmp2 = db.query("variantai", variantas, "id = "+cur.getString(2), null, null, null, null);
+        	tmp2.moveToNext();
+        	result.put(tmp.getString(1), tmp2.getString(0));
+        	}
+        }
+		
+		return result;
 	}
+	
 	
 	public void vidinisBalsavimas(String id, String varId)
 	{
@@ -45,67 +61,11 @@ public class SQLiteCommandCenter extends SQLiteOpenHelper
         Cursor cur = db.query("balsai", null, (String)null, (String[])null, (String)null, (String)null, (String)null);
         cur.moveToNext();
 
-        Toast.makeText(context, cur.getString(0)+" "+cur.getString(1)+" "+cur.getString(2), Toast.LENGTH_LONG).show();
+//        Toast.makeText(context, cur.getString(0)+" "+cur.getString(1)+" "+cur.getString(2), Toast.LENGTH_LONG).show();
 	}
 	
-	private void sinchronizuojaLenteles() {
-		try{
-			checkBalsavimai();
-		}
-		catch(Exception e){
-			// KOKY NO0RS HANDLERI, PER NAUJA PALEISTU TASKA JAI EXEPTIONAS, ARBA LAUKTU SALYGU
-		}
-		try{
-			checkVariantai();
-		}
-		catch(Exception e){
-		}
-	}
-	
-	private void checkBalasai() {
-		
-		if(!isOutterSameSizeAsInner("balsai"))
-		{
-			try {
-				balsaiJsonToSqlite();
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
-		
-	}
-	private void balsaiJsonToSqlite() throws JSONException
-	{
-		String lentele = "balsai";
-			JSONArray isWebo = json.getJSONArray("posts");
 
-			db.delete(lentele, null, null);
-
-			for (int i = 0; i < isWebo.length(); i++) {
-				JSONObject eilut = isWebo.getJSONObject(i);
-
-                ContentValues eilutesReiksmes = new ContentValues(3);
-                
-                eilutesReiksmes.put("vart_id", eilut.getString("vart_id"));
-                eilutesReiksmes.put("bals_id",eilut.getInt("bals_id"));
-                eilutesReiksmes.put("ats_id", eilut.getInt("ats_id"));
-                
-                db.insert(lentele, null, eilutesReiksmes);   
-				}
-	}
-	private void checkVariantai() {
-		
-		if(!isOutterSameSizeAsInner("variantai"))
-		{
-			try {
-				variantaiJsonToSqlite();
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
-		
-	}
-	private void variantaiJsonToSqlite() throws JSONException
+	public static void variantaiJsonToSqlite(JSONObject json) throws JSONException
 	{
 		String lentele = "variantai";
 			JSONArray isWebo = json.getJSONArray("posts");
@@ -125,21 +85,13 @@ public class SQLiteCommandCenter extends SQLiteOpenHelper
                 db.insert(lentele, null, eilutesReiksmes);   
 				}
 	}
-	private void checkBalsavimai() {
-		if(!isOutterSameSizeAsInner("balsavimai"))
-		{
-			try {
-				balsavimaiJsonToSqlite();
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
-	}
-	private void balsavimaiJsonToSqlite() throws JSONException
+
+	public static void balsavimaiJsonToSqlite(JSONObject json) throws JSONException
 	{
+		String lentele = "balsavimai";
 			JSONArray isWebo = json.getJSONArray("posts");
 
-			db.delete("balsavimai", null, null);
+			db.delete(lentele, null, null);
 
 			for (int i = 0; i < isWebo.length(); i++) {
 				JSONObject eilut = isWebo.getJSONObject(i);
@@ -148,36 +100,27 @@ public class SQLiteCommandCenter extends SQLiteOpenHelper
                 
                 eilutesReiksmes.put("id", eilut.getInt("id"));
                 eilutesReiksmes.put("pavadinimas",eilut.getString("pavadinimas"));
-                eilutesReiksmes.put("ikeltas", eilut.getInt("ikeltas"));
-                eilutesReiksmes.put("pabaiga", eilut.getInt("pabaiga"));
-                db.insert("balsavimai", null, eilutesReiksmes);   
+                eilutesReiksmes.put("ikeltas", eilut.getString("ikeltas"));
+                eilutesReiksmes.put("pabaiga", eilut.getString("pabaiga"));
+                db.insert(lentele, null, eilutesReiksmes);   
 				}
+	}
+	
+	public static SQLiteDatabase initiateDb(Context context)
+	{
+		db = new SQLiteCommandCenter(context).getReadableDatabase();
+		createTables(db);
+		return db;
 	}
 	
 	//konstruktorius tam kad DatabaseHelperis grazintu duomenu baze, kitaip neiseina
 	public SQLiteCommandCenter(Context context) {
 		super(context, "Mmusu.db", null, 1);
-		this.context = context;
-	}
-	
-	// palygina lenteliu dydzius, 
-	// String : lenteles pavadinimas, taippat php failo pavadinimas
-	private boolean isOutterSameSizeAsInner(String tablename)
-	{
-		try{
-			json = JSONParser.getJSONFromUrl("http://rinkimai2014.coxslot.com/webservisas/"+tablename+".php");
-		}
-		catch(Exception e){
-			
-		}
-		if(json.length() == db.query(tablename, null, (String)null, (String[])null, (String)null, (String)null, (String)null).getCount()){
-			return true;
-		}
-		return false;
+//		this.context = context;
 	}
 	
 	// kuria lenteles jei neegzistuoja
-	private void createTables(SQLiteDatabase db) {
+	private static void createTables(SQLiteDatabase db) {
 		db.execSQL("CREATE TABLE IF NOT EXISTS balsai "+
 	"( vart_id text NOT NULL,"
 	+ " bals_id int(11) NOT NULL,"+
@@ -196,14 +139,6 @@ public class SQLiteCommandCenter extends SQLiteOpenHelper
 				+ "variantas text NOT NULL) ");
 	}
 	
-	//kurai db jei neegzistuoja
-	private SQLiteDatabase createdbIfNotExists()
-	{
-		SQLiteCommandCenter qc = this;
-		// metodas arba kuria arba atidaro db kuria nurodome commandcenter superio konstruktoriuje
-		SQLiteDatabase db = qc.getReadableDatabase(); 
-		return db;
-	}
 	@Override
 	public void onCreate(SQLiteDatabase db) {
 		// TODO Auto-generated method stub

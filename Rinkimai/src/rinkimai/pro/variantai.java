@@ -78,9 +78,11 @@ public class variantai extends Activity {
 	        //JSONParser jParser = new JSONParser();
 	        
 	        JSONObject json = JSONParser.getJSONFromUrl(URL);
+	        
 	      
 	        try {
-	            
+	        	SQLiteCommandCenter.variantaiJsonToSqlite(json);
+	        	
 	            variantai = json.getJSONArray(POSTS);
 
 	            // looping through all posts according to the json object returned

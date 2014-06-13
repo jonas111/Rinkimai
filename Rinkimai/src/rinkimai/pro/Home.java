@@ -57,8 +57,8 @@ public class Home extends Activity implements OnClickListener
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.layout_home);
 		
-		dbcontroller =	new SQLiteCommandCenter(getApplicationContext());
-		dbcontroller.SQLiteCommandCenterInit();
+		SQLiteCommandCenter.initiateDb(getApplicationContext());
+		
 
 //		Thread thread = new Thread(new Runnable(){
 //		    @Override

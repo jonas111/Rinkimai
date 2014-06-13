@@ -33,10 +33,10 @@ public class Tab_Me extends Activity {
 	//	balsai.put("Prezidento rinkimai", "Zuokas");
 		//balsai.put("Pralamento rinkimai", "Sernys");
 		
-	//	balsai= db.metodasArturui();
-	balsai= 	Home.dbcontroller.metodasArturui();
-	balsai.put("Pasaulio pabaiga", "rytoi");
-	balsai.put("Pralamento rinkimai", "Sernys");
+
+	balsai= 	SQLiteCommandCenter.metodasArturui(getApplicationContext());
+	//balsai.put("Pasaulio pabaiga", "rytoi");
+	//balsai.put("Pralamento rinkimai", "Sernys");
 		
 		//tam kad is hashmap galetume istraukti visus duomenis naudosim mapset
 		Set mapSet = (Set) balsai.entrySet();

@@ -108,7 +108,13 @@ public class info extends Activity {
 		    	@Override
 		    	public void onClick(View v) {
 		    		
-		    		new Voting().execute();
+		    		if(SQLiteCommandCenter.isInternetWorking(getApplicationContext()))
+		    		{
+		    			new Voting().execute();
+		    		}
+		    		else{
+		    			SQLiteCommandCenter.vidinisBalsavimas(var_id, variantas);
+		    		}
 		    		 	/*
 		    			Context context = getApplicationContext();
 				        ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService( Context.CONNECTIVITY_SERVICE );

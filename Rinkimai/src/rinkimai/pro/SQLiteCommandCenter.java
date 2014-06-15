@@ -12,6 +12,8 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.widget.Toast;
 
 
@@ -19,6 +21,17 @@ import android.widget.Toast;
 public class SQLiteCommandCenter extends SQLiteOpenHelper
 {
 	private static SQLiteDatabase db;
+	
+	public static boolean isInternetWorking(Context context)
+	{
+		ConnectivityManager connectivitymanager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+		NetworkInfo networkinfo = connectivitymanager.getActiveNetworkInfo();
+        NetworkInfo mobnetworkinfo = connectivitymanager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE );
+		if(networkinfo != null && networkinfo.isConnected() || mobnetworkinfo != null && mobnetworkinfo.isConnected() ){
+			return true;
+		}
+		return false;
+	}
 	
 	public static HashMap<String,String> metodasArturui(Context context)
 	{

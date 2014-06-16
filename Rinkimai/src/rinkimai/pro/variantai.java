@@ -75,11 +75,9 @@ public class variantai extends Activity {
 	 public void updateJSONdata() {
 	    	
 	        variantuSarasas = new ArrayList<HashMap<String, String>>();
-	        //JSONParser jParser = new JSONParser();
 	        
 	        JSONObject json = JSONParser.getJSONFromUrl(URL);
 	        
-	      
 	        try {
 	        	SQLiteCommandCenter.variantaiJsonToSqlite(json);
 	        	
@@ -96,10 +94,8 @@ public class variantai extends Activity {
 	                String id = c.getString(ID);
 	                String var_id = c.getString("var_id");
 	                              
-
 	                // creating new HashMap
 	                HashMap<String, String> map = new HashMap<String, String>();
-	              
 	                
 	                map.put(INFO, info);
 	                map.put(VARIANTAS, variantas);

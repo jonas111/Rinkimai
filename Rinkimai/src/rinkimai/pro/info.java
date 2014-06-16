@@ -41,7 +41,7 @@ public class info extends Activity {
 	    private static final String VOTE_URL = "http://rinkimai2014.coxslot.com/webservisas/vote.php";
 	    //linkas patraukti vartotoju duomenis
 		private static final String URL = "http://rinkimai2014.coxslot.com/webservisas/vartotojai.php";
- 
+		private static final String URL2 = "http://rinkimai2014.coxslot.com/webservisas/balsai.php";
 	    
 	    //Json tagai
 	    private static final String TAG_SUCCESS = "success";
@@ -58,6 +58,9 @@ public class info extends Activity {
 	    //private Button b = (Button) findViewById(R.id.vote);
 	    
 	    private JSONArray juserid = null;
+	    private JSONArray balsai = null;
+	    public ArrayList<HashMap<String, String>> pabalsuota = new ArrayList<HashMap<String, String>>();
+	    
 	    
 	    private static final String POSTS = "posts";
 
@@ -82,9 +85,12 @@ public class info extends Activity {
 	            // isgaunama pasirinkto varianto id. Paspaudus vote keliauja y db
 		        variantas = (String) b.get("ats_id");
 	        }
+	        new CheckIfVoted().execute();
+	        
 	        
 	        backBtn();
 	        voteBtn();
+	        
 	    }
 	 
 	 public void backBtn(){
@@ -155,7 +161,7 @@ public class info extends Activity {
 			protected String doInBackground(String... args) {
 				// TODO Auto-generated method stub
 				 // Check for success tag
-				updateJSONdata();
+				//updateJSONdata();
 	            int success;
 	           
 	            try {
@@ -202,6 +208,7 @@ public class info extends Activity {
 	            if (file_url != null){
 	            	Toast.makeText(info.this, file_url, Toast.LENGTH_LONG).show();
 	            }
+	            vote.setEnabled(false);
 	 
 	        }
 			
@@ -230,6 +237,70 @@ public class info extends Activity {
 	        }
 	    }
 	 
+	 public void updateJSONdata2() {
+	    	
+	        
+	        JSONObject json = JSONParser.getJSONFromUrl(URL2);
+	      
+	        try {
+	            
+	            balsai = json.getJSONArray(POSTS);
+
+	            // looping through all posts according to the json object returned
+	            for (int i = 0; i < balsai.length(); i++) {
+	                JSONObject c = balsai.getJSONObject(i);
+	                HashMap<String, String> map = new HashMap<String, String>();
+	                map.put("var",c.getString("vart_id"));
+	                map.put("ats",c.getString("ats_id"));
+	                pabalsuota.add(map);
+	                           
+	            }
+
+	        } catch (JSONException e) {
+	            e.printStackTrace();
+	        }
+	    }
+	 
+
+	 class CheckIfVoted extends AsyncTask<Void, Void, Boolean> {
+
+			
+		 @Override
+			protected void onPreExecute() {
+				super.onPreExecute();
+				pDialog = new ProgressDialog(info.this);
+				pDialog.setMessage("Checking...");
+				pDialog.setIndeterminate(false);
+				pDialog.setCancelable(true);
+				pDialog.show();
+			}
+	        @Override
+	        protected Boolean doInBackground(Void... arg0) {
+	        	//we will develop this method in version 2
+	        	updateJSONdata();
+	            updateJSONdata2();
+	            return null;
+
+	        }
 
 
+	        @Override
+	        protected void onPostExecute(Boolean result) {
+	            super.onPostExecute(result);
+	            pDialog.dismiss();
+	            checking();
+	        }
+	    }
+	 
+	 private void checking(){
+		 for(int i = 0; i < pabalsuota.size(); i++){
+			 if(pabalsuota.get(i).get("ats").equals(variantas) && pabalsuota.get(i).get("var").equals(var_id)){
+				 vote.setEnabled(false);
+			 }
+			 
+		 }
+		 
+	 }
+	
+	
 }

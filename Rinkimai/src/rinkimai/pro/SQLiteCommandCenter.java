@@ -48,34 +48,29 @@ public class SQLiteCommandCenter extends SQLiteOpenHelper
         	{
         	cur.moveToNext();
         	tmp = db.query("balsavimai", pavadinimas, "id = "+cur.getString(1), null, null, null, null);
-        	Toast.makeText(context, cur.getColumnName(0) + cur.getString(0)+cur.getString(1)+cur.getString(2), Toast.LENGTH_LONG).show();
         	tmp.moveToNext();
-//        	tmp2 = db.query("variantai", variantas, "id = "+cur.getString(2), null, null, null, null);
-//        	tmp2.moveToNext();
-        	result.put(tmp.getString(0), cur.getString(2));
+        	tmp2 = db.query("variantai", variantas, "var_id = "+cur.getString(2), null, null, null, null);
+        	tmp2.moveToNext();
+        	
+        	result.put(tmp.getString(0), tmp2.getString(0));
         	}
         }
-		
 		return result;
 	}
 	
-	
-	public static void vidinisBalsavimas(String id, String varId)
+	public static void vidinisBalsavimas(String id, String varId,Context context)
 	{
+		
         ContentValues eilutesReiksmes = new ContentValues(3);
         
         eilutesReiksmes.put("vart_id","as");
         eilutesReiksmes.put("bals_id", id);
         eilutesReiksmes.put("ats_id",varId);
-        db.delete("balsai", null, null);
         db.insert("balsai", null, eilutesReiksmes);   
 		
         Cursor cur = db.query("balsai", null, (String)null, (String[])null, (String)null, (String)null, (String)null);
         cur.moveToNext();
-
-//        Toast.makeText(context, cur.getString(0)+" "+cur.getString(1)+" "+cur.getString(2), Toast.LENGTH_LONG).show();
 	}
-	
 
 	public static void variantaiJsonToSqlite(JSONObject json) throws JSONException
 	{

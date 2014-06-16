@@ -17,6 +17,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
@@ -219,6 +220,7 @@ public class info extends Activity {
 	                HashMap<String, String> map = new HashMap<String, String>();
 	                map.put("var",c.getString("vart_id"));
 	                map.put("ats",c.getString("ats_id"));
+	                map.put("kl", c.getString("bals_id"));
 	                pabalsuota.add(map);             
 	            }
 
@@ -256,9 +258,20 @@ public class info extends Activity {
 	 
 	 private void checking(){
 		 for(int i = 0; i < pabalsuota.size(); i++){
-			 if(pabalsuota.get(i).get("ats").equals(variantas) && pabalsuota.get(i).get("var").equals(var_id)){
+			 if(pabalsuota.get(i).get("kl").equals(balsavimas) && pabalsuota.get(i).get("var").equals(var_id)){
 				 vote.setEnabled(false);
+				 if(pabalsuota.get(i).get("ats").equals(variantas)){
+					 vote.setText("Voted");
+					 vote.setBackgroundColor(Color.GREEN);
+				 }else{
+					  
+					  TextView tevi = (TextView) findViewById(R.id.info2);
+					  tevi.setText("Siuose rinkimuose jus jau balsavote.");
+					  
+				 }
 			 }
+			 
 		 }
+		 
 	 }
 }

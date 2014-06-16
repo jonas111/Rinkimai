@@ -61,11 +61,8 @@ public class info extends Activity {
 	    private JSONArray balsai = null;
 	    public ArrayList<HashMap<String, String>> pabalsuota = new ArrayList<HashMap<String, String>>();
 	    
-	    
 	    private static final String POSTS = "posts";
 
-	
-	
 	 public void onCreate(Bundle savedInstanceState) { 
 		 
 	        super.onCreate(savedInstanceState);    
@@ -87,10 +84,8 @@ public class info extends Activity {
 	        }
 	        new CheckIfVoted().execute();
 	        
-	        
 	        backBtn();
 	        voteBtn();
-	        
 	    }
 	 
 	 public void backBtn(){
@@ -114,38 +109,18 @@ public class info extends Activity {
 		    	@Override
 		    	public void onClick(View v) {
 		    		
-		    		if(SQLiteCommandCenter.isInternetWorking(getApplicationContext()))
-		    		{
+		    		if(SQLiteCommandCenter.isInternetWorking(getApplicationContext())){
 		    			new Voting().execute();
+		    			SQLiteCommandCenter.vidinisBalsavimas(balsavimas, variantas,getApplicationContext());
 		    		}
 		    		else{
-		    			SQLiteCommandCenter.vidinisBalsavimas(var_id, variantas);
+		    			SQLiteCommandCenter.vidinisBalsavimas(balsavimas, variantas,getApplicationContext());
 		    		}
-		    		 	/*
-		    			Context context = getApplicationContext();
-				        ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService( Context.CONNECTIVITY_SERVICE );
-				        NetworkInfo activeNetInfo = connectivityManager.getActiveNetworkInfo();
-				        NetworkInfo mobNetInfo = connectivityManager.getNetworkInfo(     ConnectivityManager.TYPE_MOBILE );
-				        if ( activeNetInfo != null || mobNetInfo != null){
-				        	Toast.makeText(getApplicationContext(), "aciu uz jusu balsa", Toast.LENGTH_LONG).show();
-				        	
-				        	//Home.dbcontroller.vidinisBalsavimas("1",tx);
-				        	
-				        	
-				        }
-				        else {
-				        	Toast.makeText(getApplicationContext(), "atsiradus interneto rysiui jusu balsas bus uzskaitytas", Toast.LENGTH_LONG).show();
-						}*/
-				        
 				}
-			});
-		 
-		 
+			}); 
 	 }
 	 
-	 
 	 class Voting extends AsyncTask<String, String, String> {
-
 			
 	        @Override
 	        protected void onPreExecute() {
@@ -173,7 +148,6 @@ public class info extends Activity {
 	                params.add(new BasicNameValuePair("bals_id", balsavimas));
 	                params.add(new BasicNameValuePair("ats_id", variantas));
 	                
-	 
 	                Log.d("request!", "starting");
 	                
 	                //Posting user data to script 
@@ -197,9 +171,7 @@ public class info extends Activity {
 	            } catch (JSONException e) {
 	                e.printStackTrace();
 	            }
-	 
 	            return null;
-				
 			}
 			
 	        protected void onPostExecute(String file_url) {
@@ -209,13 +181,10 @@ public class info extends Activity {
 	            	Toast.makeText(info.this, file_url, Toast.LENGTH_LONG).show();
 	            }
 	            vote.setEnabled(false);
-	 
-	        }
-			
+	        }		
 		}
 	 
 	 public void updateJSONdata() {
-	    	
 	       	        
 	        JSONObject json = JSONParser.getJSONFromUrl(URL);
 	      
@@ -228,8 +197,7 @@ public class info extends Activity {
 	                JSONObject c = juserid.getJSONObject(i);
 
 	                if(c.getString("email").equals(username))
-	                var_id = c.getString("user_id");
-	                              
+	                var_id = c.getString("user_id");          
 	            }
 
 	        } catch (JSONException e) {
@@ -238,7 +206,6 @@ public class info extends Activity {
 	    }
 	 
 	 public void updateJSONdata2() {
-	    	
 	        
 	        JSONObject json = JSONParser.getJSONFromUrl(URL2);
 	      
@@ -252,18 +219,15 @@ public class info extends Activity {
 	                HashMap<String, String> map = new HashMap<String, String>();
 	                map.put("var",c.getString("vart_id"));
 	                map.put("ats",c.getString("ats_id"));
-	                pabalsuota.add(map);
-	                           
+	                pabalsuota.add(map);             
 	            }
 
 	        } catch (JSONException e) {
 	            e.printStackTrace();
 	        }
 	    }
-	 
 
 	 class CheckIfVoted extends AsyncTask<Void, Void, Boolean> {
-
 			
 		 @Override
 			protected void onPreExecute() {
@@ -280,9 +244,7 @@ public class info extends Activity {
 	        	updateJSONdata();
 	            updateJSONdata2();
 	            return null;
-
 	        }
-
 
 	        @Override
 	        protected void onPostExecute(Boolean result) {
@@ -297,10 +259,6 @@ public class info extends Activity {
 			 if(pabalsuota.get(i).get("ats").equals(variantas) && pabalsuota.get(i).get("var").equals(var_id)){
 				 vote.setEnabled(false);
 			 }
-			 
 		 }
-		 
 	 }
-	
-	
 }

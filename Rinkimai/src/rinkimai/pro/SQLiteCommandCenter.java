@@ -1,6 +1,7 @@
 package rinkimai.pro;
 
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import org.json.JSONArray;
@@ -22,15 +23,53 @@ public class SQLiteCommandCenter extends SQLiteOpenHelper
 {
 	private static SQLiteDatabase db;
 	
-	public static boolean isInternetWorking(Context context)
+	public static ArrayList<HashMap<String, String>> getTableBalsavimai()
 	{
-		ConnectivityManager connectivitymanager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-		NetworkInfo networkinfo = connectivitymanager.getActiveNetworkInfo();
-        NetworkInfo mobnetworkinfo = connectivitymanager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE );
-		if(networkinfo != null && networkinfo.isConnected() || mobnetworkinfo != null && mobnetworkinfo.isConnected() ){
-			return true;
+		
+		ArrayList<HashMap<String, String>> grazinimas = new ArrayList<HashMap<String, String>>();
+		Cursor cur = db.query("balsavimai", null, (String)null, (String[])null, (String)null, (String)null, (String)null);
+		int ilgis = cur.getCount();
+		for(int i = 0 ; i < ilgis ; i++)
+		{
+			if(ilgis > 0)
+			{
+				cur.moveToNext();
+				
+				HashMap<String, String> map = new HashMap<String, String>();
+	        
+				map.put("id", cur.getString(0));
+				map.put("pavadinimas", cur.getString(1));
+				map.put("ikeltas", cur.getString(2));
+				map.put("pabaiga", cur.getString(3));
+				
+				grazinimas.add(map);
+			}
 		}
-		return false;
+		return grazinimas;
+	}
+	
+	public static ArrayList<HashMap<String, String>> getTableVariantai()
+	{
+		
+		ArrayList<HashMap<String, String>> grazinimas = new ArrayList<HashMap<String, String>>();
+		Cursor cur = db.query("variantai", null, (String)null, (String[])null, (String)null, (String)null, (String)null);
+		int ilgis = cur.getCount();
+		for(int i = 0 ; i < ilgis ; i++)
+		{
+			if(ilgis > 0)
+			{
+				cur.moveToNext();
+				
+				HashMap<String, String> map = new HashMap<String, String>();
+	        
+				map.put("id", cur.getString(0));
+				map.put("var_id", cur.getString(1));
+				map.put("info", cur.getString(2));
+				map.put("variantas", cur.getString(3));
+				grazinimas.add(map);
+			}
+		}
+		return grazinimas;
 	}
 	
 	public static HashMap<String,String> metodasArturui(Context context)

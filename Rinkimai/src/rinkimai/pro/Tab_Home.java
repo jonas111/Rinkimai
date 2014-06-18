@@ -8,7 +8,8 @@ public class Tab_Home extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.tab_home);
+		setContentView(R.layout.tab_home);		
+		
 	}
 
 }

@@ -73,8 +73,9 @@ public class Tab_Vote extends Activity {
 	        balsavimuSarasas = new ArrayList<HashMap<String, String>>();
 	        //JSONParser jParser = new JSONParser();
 	        
+	        if(Home.networkStateListener.isInternetOn())
+	        {
 	        JSONObject json = JSONParser.getJSONFromUrl(URL);
-	      
 	        
 	        try {
 	        	SQLiteCommandCenter.balsavimaiJsonToSqlite(json);
@@ -111,6 +112,10 @@ public class Tab_Vote extends Activity {
 	        } catch (JSONException e) {
 	            e.printStackTrace();
 	        }
+	        }
+	        else {
+	        	balsavimuSarasas = SQLiteCommandCenter.getTableBalsavimai();
+			}
 	    }
 	 
 	 public void getAll(){

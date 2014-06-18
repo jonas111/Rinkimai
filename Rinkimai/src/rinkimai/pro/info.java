@@ -110,7 +110,7 @@ public class info extends Activity {
 		    	@Override
 		    	public void onClick(View v) {
 		    		
-		    		if(SQLiteCommandCenter.isInternetWorking(getApplicationContext())){
+		    		if(Home.networkStateListener.isInternetOn()){
 		    			new Voting().execute();
 		    			SQLiteCommandCenter.vidinisBalsavimas(balsavimas, variantas,getApplicationContext());
 		    		}

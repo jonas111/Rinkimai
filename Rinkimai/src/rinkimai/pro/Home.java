@@ -50,15 +50,16 @@ public class Home extends Activity implements OnClickListener
 	private static final String TAG_SUCCESS = "success";
 	private static final String TAG_MESSAGE = "message";
 
-	public static SQLiteCommandCenter dbcontroller ;
+	public static NetworkStateListener networkStateListener = new NetworkStateListener();
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.layout_home);
 		
-		SQLiteCommandCenter.initiateDb(getApplicationContext());
+		networkStateListener.startListening(getApplicationContext());
 		
+		SQLiteCommandCenter.initiateDb(getApplicationContext());
 
 //		Thread thread = new Thread(new Runnable(){
 //		    @Override
@@ -144,7 +145,8 @@ public class Home extends Activity implements OnClickListener
 			int success;
 			String username = email.getText().toString();
 			String password = pass.getText().toString();
-			
+			if(Home.networkStateListener.isInternetOn())
+			{
 			try {
 				// Building Parameters
 				List<NameValuePair> params = new ArrayList<NameValuePair>();
@@ -181,6 +183,13 @@ public class Home extends Activity implements OnClickListener
 				}
 			} catch (JSONException e) {
 				e.printStackTrace();
+			}
+			}
+			else {
+				success = 1;
+				Intent i = new Intent(Home.this, MainTabs.class);
+				finish();
+				startActivity(i);
 			}
 
 			return null;

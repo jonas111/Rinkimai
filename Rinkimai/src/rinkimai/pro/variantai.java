@@ -8,6 +8,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 
+
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -17,6 +18,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 
@@ -76,6 +78,8 @@ public class variantai extends Activity {
 	    	
 	        variantuSarasas = new ArrayList<HashMap<String, String>>();
 	        
+	        if(Home.networkStateListener.isInternetOn())
+	        {
 	        JSONObject json = JSONParser.getJSONFromUrl(URL);
 	        
 	        try {
@@ -110,6 +114,10 @@ public class variantai extends Activity {
 
 	        } catch (JSONException e) {
 	            e.printStackTrace();
+	        }
+	        
+	        }else{
+	        	variantuSarasas = SQLiteCommandCenter.getTableVariantai();
 	        }
 	    }
 	 

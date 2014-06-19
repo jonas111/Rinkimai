@@ -41,7 +41,6 @@ public class Tab_Vote extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.tab_vote);
 		new LoadBalsavimai().execute();
-		//getAll();
 	}
 
 	@Override
@@ -51,11 +50,16 @@ public class Tab_Vote extends Activity {
 		return true;
 	}
 	
+	@Override
+	public void onResume(){
+	    super.onResume();
+	}
+	
 	public void CreateList(final String text, final String id, final String ikeltas, final String pabaiga){
 		
 		LinearLayout panele = (LinearLayout) findViewById(R.id.panele);
 		Button bt = new Button(getApplicationContext());
-		bt.setText(text);
+		bt.setText(text+"\n Pradzia: "+ikeltas+"\n Pabaiga: "+pabaiga+")");
 		bt.setOnClickListener(new View.OnClickListener() {
 		    @Override
 		    public void onClick(View v) {

@@ -70,29 +70,34 @@ public class info extends Activity {
 		 
 	        super.onCreate(savedInstanceState);    
 	        setContentView(R.layout.info);
-	        TextView tv = (TextView)findViewById(R.id.variantas);
-	        TextView inf = (TextView)findViewById(R.id.info);
-	        tevi = (TextView) findViewById(R.id.info2);
-	        Intent iin= getIntent();
-	      //* isgaunami duomenys siunciami is praejusio activicio
-	        Bundle b = iin.getExtras();
+	        fillList();
 	        
-	        if(b!=null)
-	        {
-	        	// isgaunamas varianto pavadinimas (jy parodau siame activity)
-	            tv.setText((String) b.get("pavadinimas"));
-	            // isgaunama informacija apie pasirinkta varianta (jy parodau siame activity)
-	            inf.setText((String) b.get("info"));
-	            // isgaunama pasirinkto varianto id. Paspaudus vote keliauja y db
-		        variantas = (String) b.get("ats_id");
-	        }
-	        
-	        new CheckIfVoted().execute();
-	        
-	        
-	        backBtn();
-	        voteBtn();
 	    }
+	public void fillList(){
+		
+		TextView tv = (TextView)findViewById(R.id.variantas);
+        TextView inf = (TextView)findViewById(R.id.info);
+        tevi = (TextView) findViewById(R.id.info2);
+        Intent iin= getIntent();
+      //* isgaunami duomenys siunciami is praejusio activicio
+        Bundle b = iin.getExtras();
+        
+        if(b!=null)
+        {
+        	// isgaunamas varianto pavadinimas (jy parodau siame activity)
+            tv.setText((String) b.get("pavadinimas"));
+            // isgaunama informacija apie pasirinkta varianta (jy parodau siame activity)
+            inf.setText((String) b.get("info"));
+            // isgaunama pasirinkto varianto id. Paspaudus vote keliauja y db
+	        variantas = (String) b.get("ats_id");
+        }
+        
+        new CheckIfVoted().execute();
+        
+        
+        backBtn();
+        voteBtn();
+	}
 	 
 	 public void backBtn(){
 		 Button a = (Button) findViewById(R.id.back_b);

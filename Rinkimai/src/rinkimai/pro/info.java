@@ -2,6 +2,7 @@ package rinkimai.pro;
 
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 
@@ -63,6 +64,7 @@ public class info extends Activity {
 	    public ArrayList<HashMap<String, String>> pabalsuota = new ArrayList<HashMap<String, String>>();
 	    
 	    private static final String POSTS = "posts";
+	    private TextView tevi;
 
 	 public void onCreate(Bundle savedInstanceState) { 
 		 
@@ -70,6 +72,7 @@ public class info extends Activity {
 	        setContentView(R.layout.info);
 	        TextView tv = (TextView)findViewById(R.id.variantas);
 	        TextView inf = (TextView)findViewById(R.id.info);
+	        tevi = (TextView) findViewById(R.id.info2);
 	        Intent iin= getIntent();
 	      //* isgaunami duomenys siunciami is praejusio activicio
 	        Bundle b = iin.getExtras();
@@ -83,7 +86,9 @@ public class info extends Activity {
 	            // isgaunama pasirinkto varianto id. Paspaudus vote keliauja y db
 		        variantas = (String) b.get("ats_id");
 	        }
+	        
 	        new CheckIfVoted().execute();
+	        
 	        
 	        backBtn();
 	        voteBtn();
@@ -135,9 +140,7 @@ public class info extends Activity {
 			
 			@Override
 			protected String doInBackground(String... args) {
-				// TODO Auto-generated method stub
-				 // Check for success tag
-				//updateJSONdata();
+				//balsavimo funkcionalumas
 	            int success;
 	           
 	            try {
@@ -255,23 +258,41 @@ public class info extends Activity {
 	            checking();
 	        }
 	    }
-	 
+	 //patikrina ar galima balsuoti
 	 private void checking(){
+		 if(!Tab_Vote.pabaigosD.equals("0000-00-00 00:00:00")){
+			 Calendar now = Calendar.getInstance();
+			 //jei dabartine data yra veliau uz rinkimu pabaigos data
+			 if(DateHelp.isFirstDateBigger(DateHelp.formatDate(now.getTime().toString()),Tab_Vote.pabaigosD)){
+				 vote.setEnabled(false);
+				 tevi.setText("Rinkimai pasibaige.");
+			 }
+			 //jei rinkimu pradzia dar neatejo
+			 else if(DateHelp.isFirstDateBigger(Tab_Vote.ikelimoD, DateHelp.formatDate(now.getTime().toString()))){
+				 vote.setEnabled(false);
+				 tevi.setText("Rinkimai prasides nuo " + Tab_Vote.ikelimoD);
+			 }else{
+				 checkIfVoted();
+			 }
+			 
+		 }else{
+			 checkIfVoted();
+		 
+		 }
+	 }
+	 private void checkIfVoted(){
 		 for(int i = 0; i < pabalsuota.size(); i++){
 			 if(pabalsuota.get(i).get("kl").equals(balsavimas) && pabalsuota.get(i).get("var").equals(var_id)){
 				 vote.setEnabled(false);
 				 if(pabalsuota.get(i).get("ats").equals(variantas)){
 					 vote.setText("Voted");
 					 vote.setBackgroundColor(Color.GREEN);
+					 tevi.setText("Pabalsuota uz si varianta.");
 				 }else{
-					  
-					  TextView tevi = (TextView) findViewById(R.id.info2);
-					  tevi.setText("Siuose rinkimuose jus jau balsavote.");
-					  
+					 tevi.setText("Siuose rinkimuose jus jau balsavote.");
 				 }
 			 }
-			 
-		 }
 		 
+		 }
 	 }
 }

@@ -29,6 +29,8 @@ public class Tab_Vote extends Activity {
     private static final String IKELTAS = "ikeltas";
     private static final String PABAIGA = "pabaiga";
     public static String balsId;
+    public static String ikelimoD;
+    public static String pabaigosD;
     
     private JSONArray balsavimai = null;
     private ArrayList<HashMap<String, String>> balsavimuSarasas;
@@ -49,7 +51,7 @@ public class Tab_Vote extends Activity {
 		return true;
 	}
 	
-	public void CreateList(final String text, final String id){
+	public void CreateList(final String text, final String id, final String ikeltas, final String pabaiga){
 		
 		LinearLayout panele = (LinearLayout) findViewById(R.id.panele);
 		Button bt = new Button(getApplicationContext());
@@ -61,6 +63,8 @@ public class Tab_Vote extends Activity {
 		    	intent.putExtra("id", id);
 		    	intent.putExtra("pavadinimas", text);
 		    	balsId = id;
+		    	ikelimoD = ikeltas;
+		    	pabaigosD = pabaiga;
 		    	startActivityForResult(intent, 0);
 		    }
 		});
@@ -122,7 +126,9 @@ public class Tab_Vote extends Activity {
 		 for(int i = 0; i < balsavimuSarasas.size(); i++){
 			 String a = balsavimuSarasas.get(i).get(PAVADINIMAS);
 			 String b = balsavimuSarasas.get(i).get(ID);
-			 CreateList(a, b);
+			 String c = balsavimuSarasas.get(i).get(IKELTAS);
+			 String d = balsavimuSarasas.get(i).get(PABAIGA);
+			 CreateList(a, b, c, d);
 		 }
 	 }
 	 

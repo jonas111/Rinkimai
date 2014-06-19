@@ -1,11 +1,13 @@
 package rinkimai.pro;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
 public class DateHelp {
-	private static Boolean isFirstDateBigger(String firstDate, String secondDate){
+	public static Boolean isFirstDateBigger(String firstDate, String secondDate){
 		
 		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		try {
@@ -28,5 +30,18 @@ public class DateHelp {
 			e.printStackTrace();
 		}
 		return false;
+	}
+	
+	public static String formatDate(String date){
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		DateFormat formatter2 = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.US);
+		String b = "";
+		try {
+			Date a1 = (Date) formatter2.parse(date);
+			b = formatter.format(a1);
+		}catch (ParseException e) {
+			e.printStackTrace();
+		}
+		return b;
 	}
 }

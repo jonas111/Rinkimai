@@ -117,19 +117,39 @@ public class SQLiteCommandCenter extends SQLiteOpenHelper
 			JSONArray isWebo = json.getJSONArray("posts");
 
 			db.delete(lentele, null, null);
-
+			String[] ts = {"timestamp"};
+			Cursor tikr = db.query(lentele,ts , null, null, null, null, "timestamp");
+			
+			boolean reikiaPakeitimu = false;
+			
+			tikr.moveToNext();
+			
 			for (int i = 0; i < isWebo.length(); i++) {
 				JSONObject eilut = isWebo.getJSONObject(i);
 
-                ContentValues eilutesReiksmes = new ContentValues(4);
-                
-                eilutesReiksmes.put("id", eilut.getInt("id"));
-                eilutesReiksmes.put("var_id", eilut.getInt("var_id"));
-                eilutesReiksmes.put("info",eilut.getString("info"));
-                eilutesReiksmes.put("variantas", eilut.getString("variantas"));
-                
-                db.insert(lentele, null, eilutesReiksmes);   
+				tikr.getString(0);
+				// tikrinimas
+				eilut.getString("timestamp");
+			}
+				
+			if(reikiaPakeitimu)
+			{
+				for (int i = 0; i < isWebo.length(); i++) {
+					JSONObject eilut = isWebo.getJSONObject(i);
+
+	                ContentValues eilutesReiksmes = new ContentValues(4);
+	                
+	                eilutesReiksmes.put("id", eilut.getInt("id"));
+	                eilutesReiksmes.put("var_id", eilut.getInt("var_id"));
+	                eilutesReiksmes.put("info",eilut.getString("info"));
+	                eilutesReiksmes.put("variantas", eilut.getString("variantas"));
+	                
+	                db.insert(lentele, null, eilutesReiksmes);   
 				}
+			}
+				
+				
+			
 	}
 
 	public static void balsavimaiJsonToSqlite(JSONObject json) throws JSONException

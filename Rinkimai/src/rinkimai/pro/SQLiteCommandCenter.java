@@ -83,7 +83,7 @@ public class SQLiteCommandCenter extends SQLiteOpenHelper
 		Cursor tmp2;
         for(int i = 0 ; i < ilgis ; i++)
         {
-        	if(ilgis>0)
+        	if(ilgis>0 && db.query("balsavimai", null, null, null, null, null, null).getCount() > 0 && db.query("variantai", null, null, null, null, null, null).getCount() > 0)
         	{
         	cur.moveToNext();
         	tmp = db.query("balsavimai", pavadinimas, "id = "+cur.getString(1), null, null, null, null);
@@ -116,37 +116,38 @@ public class SQLiteCommandCenter extends SQLiteOpenHelper
 		String lentele = "variantai";
 			JSONArray isWebo = json.getJSONArray("posts");
 
+			String timestamp = "time_stamp";
 			db.delete(lentele, null, null);
-			String[] ts = {"timestamp"};
-			Cursor tikr = db.query(lentele,ts , null, null, null, null, "timestamp");
+			String[] ts = {timestamp};
+			Cursor tikr = db.query(lentele,ts , null, null, null, null, timestamp);
 			
 			boolean reikiaPakeitimu = false;
 			
-			tikr.moveToNext();
-			
-			for (int i = 0; i < isWebo.length(); i++) {
-				JSONObject eilut = isWebo.getJSONObject(i);
-
-				tikr.getString(0);
-				// tikrinimas
-				eilut.getString("timestamp");
-			}
-				
-			if(reikiaPakeitimu)
+//			tikr.moveToNext();
+			if(tikr.getCount() > 0)
 			{
 				for (int i = 0; i < isWebo.length(); i++) {
 					JSONObject eilut = isWebo.getJSONObject(i);
+	
+					DateHelp.isFirstDateBigger(tikr.getString(0),eilut.getString(timestamp));
 
-	                ContentValues eilutesReiksmes = new ContentValues(4);
-	                
-	                eilutesReiksmes.put("id", eilut.getInt("id"));
-	                eilutesReiksmes.put("var_id", eilut.getInt("var_id"));
-	                eilutesReiksmes.put("info",eilut.getString("info"));
-	                eilutesReiksmes.put("variantas", eilut.getString("variantas"));
-	                
-	                db.insert(lentele, null, eilutesReiksmes);   
 				}
 			}
+//			if(reikiaPakeitimu)
+//			{
+//				for (int i = 0; i < isWebo.length(); i++) {
+//					JSONObject eilut = isWebo.getJSONObject(i);
+//
+//	                ContentValues eilutesReiksmes = new ContentValues(4);
+//	                
+//	                eilutesReiksmes.put("id", eilut.getInt("id"));
+//	                eilutesReiksmes.put("var_id", eilut.getInt("var_id"));
+//	                eilutesReiksmes.put("info",eilut.getString("info"));
+//	                eilutesReiksmes.put("variantas", eilut.getString("variantas"));
+//	                
+//	                db.insert(lentele, null, eilutesReiksmes);   
+//				}
+//			}
 				
 				
 			
@@ -175,6 +176,7 @@ public class SQLiteCommandCenter extends SQLiteOpenHelper
 	public static SQLiteDatabase initiateDb(Context context)
 	{
 		db = new SQLiteCommandCenter(context).getReadableDatabase();
+//		db.execSQL("drop table variantai");
 		createTables(db);
 		return db;
 	}
@@ -202,7 +204,8 @@ public class SQLiteCommandCenter extends SQLiteOpenHelper
 		" id int(11) NOT NULL, "
 		+ " var_id int(11),"+
 				" info text NOT NULL,  "
-				+ "variantas text NOT NULL) ");
+				+ "variantas text NOT NULL,"
+				+ "time_stamp DATETIME NOT NULL) ");
 	}
 	
 	@Override

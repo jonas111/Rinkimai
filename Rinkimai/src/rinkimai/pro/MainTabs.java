@@ -63,24 +63,18 @@ public class MainTabs extends TabActivity implements OnTabChangeListener
         spec = tabHost.newTabSpec("Stats").setIndicator("Stats")
                       .setContent(intent);
         tabHost.addTab(spec);
-        
-        /************* TAB4 ************/
-        intent = new Intent().setClass(this, Tab_Info.class);
+                
+        /************* TAB5 ************/
+        intent = new Intent().setClass(this, Tab_Me.class);
         spec = tabHost.newTabSpec("Info").setIndicator("Info")
                       .setContent(intent);
         tabHost.addTab(spec);
-        
-        /************* TAB5 ************/
-        intent = new Intent().setClass(this, Tab_Me.class);
-        spec = tabHost.newTabSpec("Me").setIndicator("Me")
-                      .setContent(intent);
-        tabHost.addTab(spec);
-   
+    
         // Set drawable images to tab
         tabHost.getTabWidget().getChildAt(1).setBackgroundResource(color.white);
         tabHost.getTabWidget().getChildAt(2).setBackgroundResource(color.white);
         tabHost.getTabWidget().getChildAt(3).setBackgroundResource(color.white);
-        tabHost.getTabWidget().getChildAt(4).setBackgroundResource(color.white);
+        //tabHost.getTabWidget().getChildAt(4).setBackgroundResource(color.white);
            
         // Set Tab1 as Default tab and change image   
         tabHost.getTabWidget().setCurrentTab(0);
@@ -105,8 +99,6 @@ public class MainTabs extends TabActivity implements OnTabChangeListener
               tabHost.getTabWidget().getChildAt(i).setBackgroundResource(color.white);
           else if(i==3)
               tabHost.getTabWidget().getChildAt(i).setBackgroundResource(color.white);
-          else if(i==4)
-              tabHost.getTabWidget().getChildAt(i).setBackgroundResource(color.white);
       }
        
        
@@ -119,8 +111,6 @@ public class MainTabs extends TabActivity implements OnTabChangeListener
   else if(tabHost.getCurrentTab()==2)
       tabHost.getTabWidget().getChildAt(tabHost.getCurrentTab()).setBackgroundResource(color.holo_green_dark);
   else if(tabHost.getCurrentTab()==3)
-      tabHost.getTabWidget().getChildAt(tabHost.getCurrentTab()).setBackgroundResource(color.holo_green_dark);
-  else if(tabHost.getCurrentTab()==4)
       tabHost.getTabWidget().getChildAt(tabHost.getCurrentTab()).setBackgroundResource(color.holo_green_dark);
   }
 

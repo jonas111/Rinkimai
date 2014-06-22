@@ -8,7 +8,7 @@ import android.net.ConnectivityManager;
 
 public class NetworkStateListener {
 
-	private boolean isInternetOn;
+	private static boolean isInternetOn;
 	
 	private ConnectivityReciever connectivityReciever;
 	
@@ -16,7 +16,7 @@ public class NetworkStateListener {
 	
 	private Context context;
 	
-	public boolean isInternetOn()
+	public static boolean isInternetOn()
 	{
 		return isInternetOn;
 	}

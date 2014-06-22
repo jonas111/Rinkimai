@@ -7,6 +7,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.R.color;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -31,6 +32,8 @@ public class Tab_Home extends Activity {
     private static final String SURENAME = "sure_name";
     private static final String EMAIL = "email";
     private static final String ID = "user_id";
+    private static final String ASM_KOD = "asm_kod";
+    private static final String BIL_NR = "bil_nr";
     private static final String PAVADINIMAS = "pavadinimas";
     private static final String DAYS = "days";
     private static final String HOURS = "hours";
@@ -75,8 +78,37 @@ public class Tab_Home extends Activity {
             pDialog.dismiss();
             getUserData();
             getTimeLeft();
+            checkUser();
         }
     }
+	
+	private void checkUser(){
+		LinearLayout panele = (LinearLayout) findViewById(R.id.panele5);
+		
+		 for(int i = 0; i < vartotojai.size(); i++){
+			 String a = vartotojai.get(i).get(BIL_NR);
+			 String b = vartotojai.get(i).get(ASM_KOD);
+			 String c = vartotojai.get(i).get(EMAIL);
+			 if(Home.thisUser.equals(c)){
+				 if(a.equals("0")){
+					 TextView empty = new TextView(getApplicationContext());
+					 empty.setText("");
+					 empty.setHeight(25);
+					 panele.addView(empty);
+					 TextView tt = new TextView(getApplicationContext());
+					 tt.setText("Noredami balsuoti papildykite savo duomenis.");
+					 tt.setHeight(35);
+					 tt.setGravity(Gravity.CENTER);
+					 tt.setBackgroundColor(Color.RED);
+					 tt.setTextSize(17);
+					 MainTabs.tabHost.getTabWidget().getChildAt(1).setEnabled(false);
+				     MainTabs.tabHost.getTabWidget().getChildAt(1).setBackgroundResource(R.drawable.locked);
+				     panele.addView(tt);
+				 }
+			 }
+		 }
+		
+	}
 	
 	public void updateJSONdata() {
     	
@@ -97,6 +129,8 @@ public class Tab_Home extends Activity {
                 String name = c.getString(NAME);
                 String surename = c.getString(SURENAME);
                 String email = c.getString(EMAIL);
+                String asm = c.getString(ASM_KOD);
+                String bil = c.getString(BIL_NR);
                 user_id = c.getString(ID);
                              
                 // creating new HashMap
@@ -105,6 +139,8 @@ public class Tab_Home extends Activity {
                 map.put(NAME, name);
                 map.put(SURENAME, surename);
                 map.put(EMAIL, email);
+                map.put(ASM_KOD, asm);
+                map.put(BIL_NR, bil);
                
                 vartotojai.add(map);
              

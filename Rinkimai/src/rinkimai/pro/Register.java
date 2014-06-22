@@ -105,7 +105,14 @@ public class Register extends Activity implements OnClickListener{
                 // json success element
                 success = json.getInt(TAG_SUCCESS);
                 if (success == 1) {
-                	Log.d("User Created!", json.toString());              	
+                	Log.d("User Created!", json.toString()); 
+                	
+                	VartotojoDuomenys.setEmail(uemail);
+                	VartotojoDuomenys.setPassword(password);
+                	VartotojoDuomenys.setName(uname);
+                	VartotojoDuomenys.setSurename(usurename);
+                	SQLiteCommandCenter.registerDataToSql();
+                	
                 	finish();
                 	return json.getString(TAG_MESSAGE);
                 }else{

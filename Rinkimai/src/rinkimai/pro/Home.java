@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -39,18 +40,19 @@ public class Home extends Activity implements OnClickListener
 	private ProgressDialog pDialog;
 
 	// JSON parser class
-	JSONParser jsonParser = new JSONParser();
+	private final JSONParser jsonParser = new JSONParser();
 
 	// php login script location:
 
 	// testing on Emulator:
 	private static final String LOGIN_URL = "http://rinkimai2014.coxslot.com/webservisas/login.php";
-
+	private static final String GET_USER_DATA = "http://rinkimai2014.coxslot.com/webservisas/user_balsai.php";
+	private static final String GET_TO_MUCH_DATA = "http://rinkimai2014.coxslot.com/webservisas/vartotojai.php";
 	// JSON element ids from repsonse of php script:
 	private static final String TAG_SUCCESS = "success";
 	private static final String TAG_MESSAGE = "message";
 
-	public static NetworkStateListener networkStateListener = new NetworkStateListener();
+	public final static NetworkStateListener networkStateListener = new NetworkStateListener();
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
@@ -59,53 +61,27 @@ public class Home extends Activity implements OnClickListener
 		
 		networkStateListener.startListening(getApplicationContext());
 		
-		SQLiteCommandCenter.initiateDb(getApplicationContext());
-
-//		Thread thread = new Thread(new Runnable(){
-//		    @Override
-//		    public void run() {
-//		        try {
-//		            
-//		        	new SQLiteCommandCenter(getApplicationContext()).SQLiteCommandCenterInit();
-//		        	
-//		        } catch (Exception e) {
-//		            e.printStackTrace();
-//		        }
-//		    }
-//		});
-//
-//		thread.start(); 
+		SQLiteCommandCenter.initiateDb(getApplicationContext());	
 		
-//		BroadcastReceiver networkStateReceiver = new BroadcastReceiver() {
-//		    @Override
-//		    public void onReceive(Context context, Intent intent) {
-////		        Toast.makeText(getApplicationContext(), "Network Listener"+" Network Type Changed", Toast.LENGTH_LONG).show();
-//		        ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService( Context.CONNECTIVITY_SERVICE );
-//		        NetworkInfo activeNetInfo = connectivityManager.getActiveNetworkInfo();
-//		        NetworkInfo mobNetInfo = connectivityManager.getNetworkInfo(     ConnectivityManager.TYPE_MOBILE );
-//		        if ( activeNetInfo != null && mobNetInfo != null)
-//		        {
-//			        Toast.makeText(getApplicationContext(), "Network Listener"+" Network Type Changed", Toast.LENGTH_LONG).show();
-//
-//		        }
-//		    }
-//		};
-//
-//		IntentFilter filter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);        
-//		registerReceiver(networkStateReceiver, filter);
-			
+		SQLiteCommandCenter.loadSqliteUserData();
 		
-		// setup input fields
-		email = (EditText) findViewById(R.id.username);
-		pass = (EditText) findViewById(R.id.password);
-
-		// setup buttons
-		mSubmit = (Button) findViewById(R.id.login);
-		mRegister = (Button) findViewById(R.id.register);
-
-		// register listeners
-		mSubmit.setOnClickListener(this);
-		mRegister.setOnClickListener(this);
+//		if(VartotojoDuomenys.isLoginNeeded())
+//		{
+			// setup input fields
+			email = (EditText) findViewById(R.id.username);
+			pass = (EditText) findViewById(R.id.password);
+	
+			// setup buttons
+			mSubmit = (Button) findViewById(R.id.login);
+			mRegister = (Button) findViewById(R.id.register);
+	
+			// register listeners
+			mSubmit.setOnClickListener(this);
+			mRegister.setOnClickListener(this);
+//		}
+//		else {
+//			new GetRestOfUserData().execute();
+//		}
 
 	}
 
@@ -160,19 +136,25 @@ public class Home extends Activity implements OnClickListener
 
 				// check your log for json response
 				Log.d("Login attempt", json.toString());
-
+//				Toast.makeText(getApplicationContext(), json.getString("user_id"), Toast.LENGTH_LONG).show();
 				// json success tag
 				success = json.getInt(TAG_SUCCESS);
 				if (success == 1) {
 					Log.d("Login Successful!", json.toString());
 					// save user data
 					thisUser = username;
+
+					VartotojoDuomenys.setEmail(username);
+					VartotojoDuomenys.setPassword(password);
+					SQLiteCommandCenter.loginDataToSql();
+					
+					// wtf ? --------------------------
 					SharedPreferences sp = PreferenceManager
 							.getDefaultSharedPreferences(Home.this);
 					Editor edit = sp.edit();
 					edit.putString("email", username);
 					edit.commit();
-					
+					// --------------------------------
 					Intent i = new Intent(Home.this, MainTabs.class);
 					finish();
 					startActivity(i);
@@ -199,11 +181,69 @@ public class Home extends Activity implements OnClickListener
 		protected void onPostExecute(String file_url) {
 			// dismiss the dialog once product deleted
 			pDialog.dismiss();
+//			Toast.makeText(getApplicationContext(), Home.thisUser, Toast.LENGTH_LONG).show();
 			if (file_url != null) {
 				Toast.makeText(Home.this, file_url, Toast.LENGTH_LONG).show();
 			}
 
 		}
 
+	}
+	class GetRestOfUserData extends AsyncTask<String, String, String>
+	{
+
+		@Override
+		protected void onPreExecute() {
+			super.onPreExecute();
+			pDialog = new ProgressDialog(Home.this);
+			pDialog.setMessage("Loading...");
+			pDialog.setIndeterminate(false);
+			pDialog.setCancelable(true);
+			pDialog.show();
+		}
+
+		@Override
+		protected String doInBackground(String... params) {
+			if(Home.networkStateListener.isInternetOn())
+			{
+			try {
+				List<NameValuePair> par = new ArrayList<NameValuePair>();
+				par.add(new BasicNameValuePair("name", VartotojoDuomenys.getName()));
+				JSONObject json = JSONParser.getJSONFromUrl(GET_TO_MUCH_DATA);
+				Log.d("fetch user data!", "starting");
+				
+				JSONArray viskas = json.getJSONArray("posts");
+				int ilgis = viskas.length();
+				for(int i = 0; i < ilgis; i++)
+				{
+					
+				}
+				/**
+				 * tai bus reikalinga kai bus *.php kuris grazins tik user_id
+				JSONObject json = jsonParser.makeHttpRequest(GET_USER_DATA, "POST",
+						par);
+				**/
+				// check your log for json response
+				Log.d("Login attempt", json.toString());
+				
+				
+				//return json.getString(TAG_MESSAGE);
+			}
+			catch(Exception e)
+			{
+				e.printStackTrace();
+			}
+			}
+			Intent i = new Intent(Home.this, MainTabs.class);
+			finish();
+			startActivity(i);
+			return null;
+		}
+
+		@Override
+		protected void onPostExecute(String result) {
+			pDialog.dismiss();
+		}
+		
 	}
 }

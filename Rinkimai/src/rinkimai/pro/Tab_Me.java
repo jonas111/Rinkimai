@@ -135,6 +135,12 @@ public class Tab_Me extends Activity {
 	  {
 
 		  @Override
+		public void onDestroyView() {
+			  new PushToDb().execute();
+			super.onDestroyView();
+		}
+
+		@Override
 		public Dialog onCreateDialog(Bundle savedInstanceState) {
 			// TODO Auto-generated method stub
 //			return super.onCreateDialog(savedInstanceState);
@@ -197,15 +203,19 @@ public class Tab_Me extends Activity {
 	  }
 	  public class PushToDb extends AsyncTask<String, String, String>
 	  {
-		  private ProgressDialog pDialog;
+		  @Override
+		protected void onPostExecute(String result) {
+//			pDialog.dismiss();
+		}
+		private ProgressDialog pDialog;
 			@Override
 			protected void onPreExecute() {
 				super.onPreExecute();
-				pDialog = new ProgressDialog(getApplicationContext());
-				pDialog.setMessage("Attempting login...");
-				pDialog.setIndeterminate(false);
-				pDialog.setCancelable(true);
-				pDialog.show();
+//				pDialog = new ProgressDialog(getApplicationContext());
+//				pDialog.setMessage("Attempting login...");
+//				pDialog.setIndeterminate(false);
+//				pDialog.setCancelable(true);
+//				pDialog.show();
 			}
 		@Override
 		protected String doInBackground(String... params) {

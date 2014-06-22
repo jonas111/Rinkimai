@@ -27,6 +27,8 @@ public class Tab_Home extends Activity {
     private static final String NAME = "name";
     private static final String SURENAME = "sure_name";
     private static final String EMAIL = "email";
+    private static final String ID = "user_id";
+    public static String user_id;
     
     private JSONArray jsonTemp = null;
     private ArrayList<HashMap<String, String>> vartotojai;
@@ -84,6 +86,7 @@ public class Tab_Home extends Activity {
                 String name = c.getString(NAME);
                 String surename = c.getString(SURENAME);
                 String email = c.getString(EMAIL);
+                user_id = c.getString(ID);
                              
                 // creating new HashMap
                 HashMap<String, String> map = new HashMap<String, String>();

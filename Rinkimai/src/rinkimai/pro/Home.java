@@ -65,8 +65,8 @@ public class Home extends Activity implements OnClickListener
 		
 		SQLiteCommandCenter.loadSqliteUserData();
 		
-//		if(VartotojoDuomenys.isLoginNeeded())
-//		{
+		if(VartotojoDuomenys.isLoginNeeded())
+		{
 			// setup input fields
 			email = (EditText) findViewById(R.id.username);
 			pass = (EditText) findViewById(R.id.password);
@@ -78,10 +78,10 @@ public class Home extends Activity implements OnClickListener
 			// register listeners
 			mSubmit.setOnClickListener(this);
 			mRegister.setOnClickListener(this);
-//		}
-//		else {
-//			new GetRestOfUserData().execute();
-//		}
+		}
+		else {
+			new GetRestOfUserData().execute();
+		}
 
 	}
 

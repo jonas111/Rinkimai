@@ -89,7 +89,7 @@ public class Tab_Home extends Activity {
 			 String a = vartotojai.get(i).get(BIL_NR);
 			 String b = vartotojai.get(i).get(ASM_KOD);
 			 String c = vartotojai.get(i).get(EMAIL);
-			 if(Home.thisUser.equals(c)){
+			 if(VartotojoDuomenys.getEmail().equals(c)){
 				 if(a.equals("0")){
 					 TextView empty = new TextView(getApplicationContext());
 					 empty.setText("");

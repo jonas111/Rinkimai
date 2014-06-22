@@ -9,6 +9,7 @@ import java.util.Set;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -29,6 +30,7 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnFocusChangeListener;
 import android.view.WindowManager;
 import android.webkit.WebView.FindListener;
 import android.widget.AdapterView;
@@ -43,18 +45,19 @@ public class Tab_Me extends Activity {
 	// cia saugosim balsavimo pavadinima ir varianta uz kuri balsuota
 	
     HashMap<String, String> balsai = new HashMap<String, String>();
-      
+    JSONObject istrauktiDuomenys = null;
+    ProgressDialog pDialog;
+    
 	protected void onCreate(Bundle savedInstanceState) {
-	 
-		//fake duomenys
-		//balsai.put("Prezidento rinkimai", "Paulauskas");
-	//	balsai.put("Prezidento rinkimai", "Zuokas");
-		//balsai.put("Pralamento rinkimai", "Sernys");
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.tab_me);
+		if(NetworkStateListener.isInternetOn())
+		{
+			new GetBalsavimai().execute();
+		}
 		
-
-	balsai= 	SQLiteCommandCenter.metodasArturui(getApplicationContext());
-	//balsai.put("Pasaulio pabaiga", "rytoi");
-	//balsai.put("Pralamento rinkimai", "Sernys");
+		
+		balsai= SQLiteCommandCenter.metodasArturui(getApplicationContext());
 		
 		//tam kad is hashmap galetume istraukti visus duomenis naudosim mapset
 		Set mapSet = (Set) balsai.entrySet();
@@ -73,16 +76,8 @@ public class Tab_Me extends Activity {
              list.add( keyValue +" balsavote uz "+ value);
 		}
 
-		
-		
 
-		
-		
-		// TODO Auto-generated method stub
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.tab_me);
-	
-		
+
 		   ListView history = (ListView) findViewById(R.id.lv_history);
 		   TextView name = (TextView) findViewById(R.id.tv_name);
 		   TextView yourHistory = (TextView) findViewById(R.id.tv_history);
@@ -92,19 +87,63 @@ public class Tab_Me extends Activity {
 			@Override
 			public void onClick(View v) {
 				
-				Input ived = new Input();
-				
-				ived.show(getFragmentManager(), "ss");
-				
+				new Input().show(getFragmentManager(), "ss");
 			}
 		});
 		   final StableArrayAdapter adapter = new StableArrayAdapter(this, android.R.layout.simple_list_item_1, list);
 		   history.setAdapter(adapter);
 		   
-		  
-		name.setText("Sveiki "+ VartotojoDuomenys.getEmail());
+		   if(VartotojoDuomenys.getName().isEmpty()){
+			   name.setText("Sveiki Jusu duomenys dar nera pilnai uzpildyti, del to negalesite dalyvauti kaikuriuose balsavimuose");
+		   }
+		   else{
+			   name.setText("Sveiki "+ VartotojoDuomenys.getName());
+		   }
+		
 		yourHistory.setText(R.string.balsavote_uz);
 	}
+	
+	class GetBalsavimai extends AsyncTask<String, String, JSONArray> 
+	{
+		private static final String URL = "http://rinkimai2014.coxslot.com/webservisas/user_balsai.php";
+		
+		
+		@Override
+		protected JSONArray doInBackground(String... params) 
+		{
+			
+			List<NameValuePair> params1 = new ArrayList<NameValuePair>();
+			params1.add(new BasicNameValuePair("user_id", VartotojoDuomenys.getUser_id()));
+			istrauktiDuomenys = new JSONParser().makeHttpRequest(URL, "POST",params1);
+			try {
+				SQLiteCommandCenter.balsaiJsonToSqlite(istrauktiDuomenys);
+				Log.d("$^%&*(", istrauktiDuomenys.getInt("success")+" ");
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			return null;
+			
+		}
+		@Override
+		protected void onPreExecute() {
+			super.onPreExecute();
+			pDialog = new ProgressDialog(Tab_Me.this);
+			pDialog.setMessage("Loading...");
+			pDialog.setIndeterminate(false);
+			pDialog.setCancelable(true);
+			pDialog.show();
+		}
+	protected void onPostExecute(JSONArray result) {
+		pDialog.dismiss();
+		
+	}
+			
+			
+	
+	}
+	
 	// adapterio sukurimas 
 	  private class StableArrayAdapter extends ArrayAdapter<String> {
 
@@ -134,31 +173,29 @@ public class Tab_Me extends Activity {
 	public class Input extends DialogFragment
 	  {
 
-		  @Override
-		public void onDestroyView() {
-			  new PushToDb().execute();
-			super.onDestroyView();
-		}
-
 		@Override
 		public Dialog onCreateDialog(Bundle savedInstanceState) {
-			// TODO Auto-generated method stub
-//			return super.onCreateDialog(savedInstanceState);
+
 			  AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 			  
 			  LayoutInflater inflater = getActivity().getLayoutInflater();
-			  
 			  
 			  View maView = inflater.inflate(R.layout.dialod_user_data_input, null);
 			  
 			   builder.setView(maView);
 			  
 			   final EditText username = (EditText) maView.findViewById(R.id.username);
+			   username.setText(VartotojoDuomenys.getEmail());
 			   final EditText password = (EditText) maView.findViewById(R.id.password);
+			   password.setText(VartotojoDuomenys.getPassword());
 			   final EditText name = (EditText) maView.findViewById(R.id.name);
+			   name.setText(VartotojoDuomenys.getName());
 			   final EditText surename = (EditText) maView.findViewById(R.id.surename);
+			   surename.setText(VartotojoDuomenys.getSurename());
 			   final EditText asmenskodas = (EditText) maView.findViewById(R.id.asmenskodas);
+			   asmenskodas.setText(VartotojoDuomenys.getAsm_kod());
 			   final EditText builetenio_nr = (EditText) maView.findViewById(R.id.builetenio_nr);
+			   builetenio_nr.setText(VartotojoDuomenys.getBil_nr());
 			   
 			  builder.
 			  setPositiveButton("Patvirtiniti", new DialogInterface.OnClickListener() {
@@ -186,9 +223,8 @@ public class Tab_Me extends Activity {
 					}
 					
 					SQLiteCommandCenter.naujiVartotojoDuomenys();
-					
-					new PushToDb().execute();
 
+						new PushToDb().execute();
 				}
 			}).setNegativeButton("Atsaukti", new DialogInterface.OnClickListener() {
 				
@@ -197,84 +233,25 @@ public class Tab_Me extends Activity {
 					Input.this.getDialog().cancel();
 				}
 			});
-			  
 			  return builder.create();
 		}
 	  }
 	  public class PushToDb extends AsyncTask<String, String, String>
 	  {
-		  @Override
-		protected void onPostExecute(String result) {
-//			pDialog.dismiss();
-		}
-		private ProgressDialog pDialog;
-			@Override
-			protected void onPreExecute() {
-				super.onPreExecute();
-//				pDialog = new ProgressDialog(getApplicationContext());
-//				pDialog.setMessage("Attempting login...");
-//				pDialog.setIndeterminate(false);
-//				pDialog.setCancelable(true);
-//				pDialog.show();
-			}
+			private static final String URL = "http://rinkimai2014.coxslot.com/webservisas/user_update.php";
 		@Override
 		protected String doInBackground(String... params) {
-//			if(Home.networkStateListener.isInternetOn())
-//			{
-//			try {
-//				// Building Parameters
-//				List<NameValuePair> params = new ArrayList<NameValuePair>();
-//				params.add(new BasicNameValuePair("email", username));
-//				params.add(new BasicNameValuePair("password", password));
-//
-//				Log.d("request!", "starting");
-//				// getting product details by making HTTP request
-//				JSONObject json = jsonParser.makeHttpRequest(LOGIN_URL, "POST",
-//						params);
-//
-//				// check your log for json response
-//				Log.d("Login attempt", json.toString());
-////				Toast.makeText(getApplicationContext(), json.getString("user_id"), Toast.LENGTH_LONG).show();
-//				// json success tag
-//				success = json.getInt(TAG_SUCCESS);
-//				if (success == 1) {
-//					Log.d("Login Successful!", json.toString());
-//					// save user data
-//					thisUser = username;
-//					
-//					VartotojoDuomenys.setEmail(username);
-//					VartotojoDuomenys.setPassword(password);
-//					SQLiteCommandCenter.loginDataToSql();
-//					
-//					// wtf ? --------------------------
-//					SharedPreferences sp = PreferenceManager
-//							.getDefaultSharedPreferences(Home.this);
-//					Editor edit = sp.edit();
-//					edit.putString("email", username);
-//					edit.commit();
-//					// --------------------------------
-//					Intent i = new Intent(Home.this, MainTabs.class);
-//					finish();
-//					startActivity(i);
-//					return json.getString(TAG_MESSAGE);
-//				} else {
-//					Log.d("Login Failure!", json.getString(TAG_MESSAGE));
-//					return json.getString(TAG_MESSAGE);
-//				}
-//			} catch (JSONException e) {
-//				e.printStackTrace();
-//			}
-//			}
-//			else {
-//				success = 1;
-//				Intent i = new Intent(Home.this, MainTabs.class);
-//				finish();
-//				startActivity(i);
-//			}
+			if(NetworkStateListener.isInternetOn() && VartotojoDuomenys.arPiliDuomenys())
+			{
+			// Building Parameters
+			List<NameValuePair> params1 = new ArrayList<NameValuePair>();
+			params1.add(new BasicNameValuePair("user_id", VartotojoDuomenys.getUser_id()));
+			params1.add(new BasicNameValuePair("asm_kod", VartotojoDuomenys.getAsm_kod()));
+			params1.add(new BasicNameValuePair("bil_nr", VartotojoDuomenys.getBil_nr()));
 
-			
+			new JSONParser().makeHttpRequest(URL, "POST",params1);
+			}
 			return null;
 		}
-		  
 	  }
 }

@@ -132,7 +132,10 @@ public class Tab_Home extends Activity {
                 String asm = c.getString(ASM_KOD);
                 String bil = c.getString(BIL_NR);
                 user_id = c.getString(ID);
-                             
+                
+                VartotojoDuomenys.setUser_id(user_id);
+                SQLiteCommandCenter.ijungtiAutentifikacija();
+                
                 // creating new HashMap
                 HashMap<String, String> map = new HashMap<String, String>();
                 

@@ -18,12 +18,19 @@ import android.net.NetworkInfo;
 import android.widget.Toast;
 
 
-
 public class SQLiteCommandCenter extends SQLiteOpenHelper
 {
 	private static SQLiteDatabase db;
 	private static final String timestamp = "time_stamp";
 	private static Cursor cur;
+	
+	public static void ijungtiAutentifikacija()
+	{
+		ContentValues eilutesReiksmes = new ContentValues(1);
+		eilutesReiksmes.put("user_id", VartotojoDuomenys.getUser_id());
+		
+		db.update("vartotojai",eilutesReiksmes, null, null);
+	}
 	
 	public static void naujiVartotojoDuomenys()
 	{
@@ -151,7 +158,7 @@ public class SQLiteCommandCenter extends SQLiteOpenHelper
 	public static void vidinisBalsavimas(String id, String varId,Context context)
 	{
         ContentValues eilutesReiksmes = new ContentValues(3);
-        eilutesReiksmes.put("vart_id","as");
+        eilutesReiksmes.put("vart_id",VartotojoDuomenys.getUser_id());
         eilutesReiksmes.put("bals_id", id);
         eilutesReiksmes.put("ats_id",varId);
         db.insert("balsai", null, eilutesReiksmes);   
@@ -203,7 +210,7 @@ public class SQLiteCommandCenter extends SQLiteOpenHelper
 				for (int i = 0; i < isWebo.length(); i++) {
 					JSONObject eilut = isWebo.getJSONObject(i);
 
-	                ContentValues eilutesReiksmes = new ContentValues(4);
+	                ContentValues eilutesReiksmes = new ContentValues(5);
 	                
 	                eilutesReiksmes.put("id", eilut.getInt("id"));
 	                eilutesReiksmes.put("var_id", eilut.getInt("var_id"));
@@ -227,7 +234,7 @@ public class SQLiteCommandCenter extends SQLiteOpenHelper
 			for (int i = 0; i < isWebo.length(); i++) {
 				JSONObject eilut = isWebo.getJSONObject(i);
 
-                ContentValues eilutesReiksmes = new ContentValues(4);
+                ContentValues eilutesReiksmes = new ContentValues(5);
                 
                 eilutesReiksmes.put("id", eilut.getInt("id"));
                 eilutesReiksmes.put("pavadinimas",eilut.getString("pavadinimas"));
@@ -238,6 +245,30 @@ public class SQLiteCommandCenter extends SQLiteOpenHelper
 				}
 			}
 	}
+	
+	public static void balsaiJsonToSqlite(JSONObject json) throws JSONException
+	{
+		String lentele = "balsai";
+			JSONArray isWebo = json.getJSONArray("posts");
+
+			if(reikiaPakeitimu(lentele,json))
+			{
+				
+			db.delete(lentele, null, null);
+			for (int i = 0; i < isWebo.length(); i++) {
+				JSONObject eilut = isWebo.getJSONObject(i);
+
+                ContentValues eilutesReiksmes = new ContentValues(4);
+                
+                eilutesReiksmes.put("vart_id", eilut.getInt("vart_id"));
+                eilutesReiksmes.put("bals_id",eilut.getString("bals_id"));
+                eilutesReiksmes.put("ats_id", eilut.getString("ats_id"));
+                eilutesReiksmes.put(timestamp, eilut.getString(timestamp));
+                db.insert(lentele, null, eilutesReiksmes);   
+				}
+			}
+	}
+	
 	
 	public static SQLiteDatabase initiateDb(Context context)
 	{

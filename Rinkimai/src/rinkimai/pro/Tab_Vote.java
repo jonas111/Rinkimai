@@ -61,7 +61,7 @@ public class Tab_Vote extends Activity {
 		LinearLayout panele = (LinearLayout) findViewById(R.id.panele);
 		Button bt = new Button(getApplicationContext());
 		bt.setText("->"+text+"<-\n"+liko);
-		bt.setTextColor(Color.GREEN);
+		bt.setTextColor(Color.BLACK);
 		bt.setOnClickListener(new View.OnClickListener() {
 		    @Override
 		    public void onClick(View v) {
@@ -83,7 +83,7 @@ public class Tab_Vote extends Activity {
 	        balsavimuSarasas = new ArrayList<HashMap<String, String>>();
 	        //JSONParser jParser = new JSONParser();
 	        
-	        if(Home.networkStateListener.isInternetOn())
+	        if(NetworkStateListener.isInternetOn())
 	        {
 	        JSONObject json = JSONParser.getJSONFromUrl(URL);
 	        

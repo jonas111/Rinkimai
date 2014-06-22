@@ -46,7 +46,6 @@ public class Home extends Activity implements OnClickListener
 
 	// testing on Emulator:
 	private static final String LOGIN_URL = "http://rinkimai2014.coxslot.com/webservisas/login.php";
-	private static final String GET_USER_DATA = "http://rinkimai2014.coxslot.com/webservisas/user_balsai.php";
 	private static final String GET_TO_MUCH_DATA = "http://rinkimai2014.coxslot.com/webservisas/vartotojai.php";
 	// JSON element ids from repsonse of php script:
 	private static final String TAG_SUCCESS = "success";
@@ -80,7 +79,9 @@ public class Home extends Activity implements OnClickListener
 			mRegister.setOnClickListener(this);
 		}
 		else {
-			new GetRestOfUserData().execute();
+			Intent i = new Intent(Home.this, MainTabs.class);
+			finish();
+			startActivity(i);
 		}
 
 	}
@@ -121,7 +122,7 @@ public class Home extends Activity implements OnClickListener
 			int success;
 			String username = email.getText().toString();
 			String password = pass.getText().toString();
-			if(Home.networkStateListener.isInternetOn())
+			if(NetworkStateListener.isInternetOn())
 			{
 			try {
 				// Building Parameters
@@ -173,9 +174,7 @@ public class Home extends Activity implements OnClickListener
 				finish();
 				startActivity(i);
 			}
-
 			return null;
-
 		}
 
 		protected void onPostExecute(String file_url) {
@@ -185,65 +184,6 @@ public class Home extends Activity implements OnClickListener
 			if (file_url != null) {
 				Toast.makeText(Home.this, file_url, Toast.LENGTH_LONG).show();
 			}
-
 		}
-
-	}
-	class GetRestOfUserData extends AsyncTask<String, String, String>
-	{
-
-		@Override
-		protected void onPreExecute() {
-			super.onPreExecute();
-			pDialog = new ProgressDialog(Home.this);
-			pDialog.setMessage("Loading...");
-			pDialog.setIndeterminate(false);
-			pDialog.setCancelable(true);
-			pDialog.show();
-		}
-
-		@Override
-		protected String doInBackground(String... params) {
-			if(Home.networkStateListener.isInternetOn())
-			{
-			try {
-				List<NameValuePair> par = new ArrayList<NameValuePair>();
-				par.add(new BasicNameValuePair("name", VartotojoDuomenys.getName()));
-				JSONObject json = JSONParser.getJSONFromUrl(GET_TO_MUCH_DATA);
-				Log.d("fetch user data!", "starting");
-				
-				JSONArray viskas = json.getJSONArray("posts");
-				int ilgis = viskas.length();
-				for(int i = 0; i < ilgis; i++)
-				{
-					
-				}
-				/**
-				 * tai bus reikalinga kai bus *.php kuris grazins tik user_id
-				JSONObject json = jsonParser.makeHttpRequest(GET_USER_DATA, "POST",
-						par);
-				**/
-				// check your log for json response
-				Log.d("Login attempt", json.toString());
-				
-				
-				//return json.getString(TAG_MESSAGE);
-			}
-			catch(Exception e)
-			{
-				e.printStackTrace();
-			}
-			}
-			Intent i = new Intent(Home.this, MainTabs.class);
-			finish();
-			startActivity(i);
-			return null;
-		}
-
-		@Override
-		protected void onPostExecute(String result) {
-			pDialog.dismiss();
-		}
-		
 	}
 }

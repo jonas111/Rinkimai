@@ -27,7 +27,7 @@ public class MainTabs extends TabActivity implements OnTabChangeListener
 {
 
 	/** Called when the activity is first created. */
-    TabHost tabHost;
+    public static TabHost tabHost;
      
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -93,8 +93,11 @@ public class MainTabs extends TabActivity implements OnTabChangeListener
       {
           if(i==0)
               tabHost.getTabWidget().getChildAt(i).setBackgroundResource(color.white);
-          else if(i==1)
-              tabHost.getTabWidget().getChildAt(i).setBackgroundResource(color.white);
+          else if(i==1){
+        	  if(tabHost.getTabWidget().getChildAt(i).isEnabled()==true){
+        		  tabHost.getTabWidget().getChildAt(i).setBackgroundResource(color.white);
+        	  }else tabHost.getTabWidget().getChildAt(1).setBackgroundResource(R.drawable.locked);
+          }
           else if(i==2)
               tabHost.getTabWidget().getChildAt(i).setBackgroundResource(color.white);
           else if(i==3)

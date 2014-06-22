@@ -10,6 +10,7 @@ import org.json.JSONObject;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Menu;
@@ -55,11 +56,12 @@ public class Tab_Vote extends Activity {
 	    super.onResume();
 	}
 	
-	public void CreateList(final String text, final String id, final String ikeltas, final String pabaiga){
+	public void CreateList(final String text, final String id, final String ikeltas, final String pabaiga, final String liko){
 		
 		LinearLayout panele = (LinearLayout) findViewById(R.id.panele);
 		Button bt = new Button(getApplicationContext());
-		bt.setText(text+"\n Pradzia: "+ikeltas+"\n Pabaiga: "+pabaiga+")");
+		bt.setText("->"+text+"<-\n"+liko);
+		bt.setTextColor(Color.GREEN);
 		bt.setOnClickListener(new View.OnClickListener() {
 		    @Override
 		    public void onClick(View v) {
@@ -127,12 +129,19 @@ public class Tab_Vote extends Activity {
 	    }
 	 
 	 public void getAll(){
+		 Boolean temp;
 		 for(int i = 0; i < balsavimuSarasas.size(); i++){
 			 String a = balsavimuSarasas.get(i).get(PAVADINIMAS);
 			 String b = balsavimuSarasas.get(i).get(ID);
 			 String c = balsavimuSarasas.get(i).get(IKELTAS);
 			 String d = balsavimuSarasas.get(i).get(PABAIGA);
-			 CreateList(a, b, c, d);
+			 String e = "";
+			 for(int j = 0; j < Tab_Home.liko.size(); j++){
+				 if(balsavimuSarasas.get(i).get(PAVADINIMAS).equals(Tab_Home.liko.get(j).get(PAVADINIMAS))){
+					 e = "Liko "+Tab_Home.liko.get(j).get("days")+ " dienos ir "+Tab_Home.liko.get(j).get("hours")+" valandos.";
+				 }else e = "Pasibaige";
+			 }
+			 CreateList(a, b, c, d, e);
 		 }
 	 }
 	 

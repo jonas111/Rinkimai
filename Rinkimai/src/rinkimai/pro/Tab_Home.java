@@ -10,8 +10,10 @@ import org.json.JSONObject;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -21,6 +23,7 @@ public class Tab_Home extends Activity {
 	
  	private ProgressDialog pDialog;
 	private static final String URL = "http://rinkimai2014.coxslot.com/webservisas/vartotojai.php";
+	private static final String URL2 = "http://rinkimai2014.coxslot.com/webservisas/daysLeft.php";
 
     
     private static final String POSTS = "posts";
@@ -28,10 +31,16 @@ public class Tab_Home extends Activity {
     private static final String SURENAME = "sure_name";
     private static final String EMAIL = "email";
     private static final String ID = "user_id";
+    private static final String PAVADINIMAS = "pavadinimas";
+    private static final String DAYS = "days";
+    private static final String HOURS = "hours";
     public static String user_id;
     
     private JSONArray jsonTemp = null;
     private ArrayList<HashMap<String, String>> vartotojai;
+    
+    private JSONArray jsonTemp2 = null;
+    public static ArrayList<HashMap<String, String>> liko;
 	
 	
 	protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +64,7 @@ public class Tab_Home extends Activity {
         @Override
         protected Boolean doInBackground(Void... arg0) {
             updateJSONdata();
+            updateJSONdata2();
             return null;
 
         }
@@ -64,6 +74,7 @@ public class Tab_Home extends Activity {
             super.onPostExecute(result);
             pDialog.dismiss();
             getUserData();
+            getTimeLeft();
         }
     }
 	
@@ -105,7 +116,44 @@ public class Tab_Home extends Activity {
                
 	}
 	
-	 public void SayHello(final String name, final String surename, final String email){
+public void updateJSONdata2() {
+    	
+        liko = new ArrayList<HashMap<String, String>>();
+        
+        JSONObject json = JSONParser.getJSONFromUrl(URL2);
+        
+        try {
+        	        	
+            jsonTemp2 = json.getJSONArray(POSTS);
+
+            // looping through all posts according to the json object returned
+            for (int i = 0; i < jsonTemp2.length(); i++) {
+                JSONObject c = jsonTemp2.getJSONObject(i);
+
+                //gets the content of each tag
+                
+                String pavadinimas = c.getString(PAVADINIMAS);
+                String days = c.getString(DAYS);
+                String hours = c.getString(HOURS);
+                                             
+                // creating new HashMap
+                HashMap<String, String> map = new HashMap<String, String>();
+                
+                map.put(PAVADINIMAS, pavadinimas);
+                map.put(DAYS, days);
+                map.put(HOURS, hours);
+               
+                liko.add(map);
+             
+            }
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+               
+	}
+	
+	 private void SayHello(final String name, final String surename, final String email){
 			
 			LinearLayout panele = (LinearLayout) findViewById(R.id.panele5);
 			TextView tt = (TextView) findViewById(R.id.pasisveikinimas);
@@ -113,13 +161,33 @@ public class Tab_Home extends Activity {
 						
 		}
 	 
-	 public void getUserData(){
+	 private void getUserData(){
 		 for(int i = 0; i < vartotojai.size(); i++){
 			 String a = vartotojai.get(i).get(NAME);
 			 String b = vartotojai.get(i).get(SURENAME);
 			 String c = vartotojai.get(i).get(EMAIL);
 			 if(Home.thisUser.equals(c)) SayHello(a, b, c);
 		 }
+	 }
+	 
+	 public void getTimeLeft(){
+		 for(int i = 0; i < liko.size(); i++){
+			 String a = liko.get(i).get(PAVADINIMAS);
+			 String b = liko.get(i).get(DAYS);
+			 String c = liko.get(i).get(HOURS);
+			 postList(a, b, c);
+		 }
+	 }
+	 
+	 private void postList(final String pav, final String days, final String hours){
+		 LinearLayout panele = (LinearLayout) findViewById(R.id.panele5);
+		 TextView tt = new TextView(getApplicationContext());
+		 tt.setText("Iki "+pav+" liko "+days+ " dienos ir "+hours+" valandos.");
+		 tt.setHeight(25);
+		 tt.setGravity(Gravity.CENTER);
+		 tt.setTextColor(Color.GREEN);
+		 tt.setTextSize(16);
+		 panele.addView(tt);
 	 }
 
 }

@@ -166,7 +166,7 @@ public void updateJSONdata2() {
 			 String a = vartotojai.get(i).get(NAME);
 			 String b = vartotojai.get(i).get(SURENAME);
 			 String c = vartotojai.get(i).get(EMAIL);
-			 if(Home.thisUser.equals(c)) SayHello(a, b, c);
+			 if(VartotojoDuomenys.getEmail().equals(c)) SayHello(a, b, c);
 		 }
 	 }
 	 

@@ -28,7 +28,13 @@ public class MainTabs extends TabActivity implements OnTabChangeListener
 
 	/** Called when the activity is first created. */
     TabHost tabHost;
-     
+    
+    // aplikacijai uzsidarant reik uzdaryt db
+     @Override
+    protected void onDestroy() {
+    	super.onDestroy();
+    	SQLiteCommandCenter.kill();
+    }
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

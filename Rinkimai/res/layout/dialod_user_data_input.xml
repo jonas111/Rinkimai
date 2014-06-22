@@ -22,7 +22,7 @@
         android:hint="email" />
     <EditText
         android:id="@+id/password"
-        android:inputType="textPassword"
+        android:inputType="text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
@@ -33,7 +33,7 @@
         android:hint="password"/>
         <EditText
         android:id="@+id/name"
-        android:inputType="textEmailAddress"
+        android:inputType="text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
@@ -43,7 +43,7 @@
         android:hint="name" />
 		<EditText
         android:id="@+id/surename"
-        android:inputType="textEmailAddress"
+        android:inputType="text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
@@ -53,7 +53,7 @@
         android:hint="surename" />
 		    <EditText
         android:id="@+id/asmenskodas"
-        android:inputType="textEmailAddress"
+        android:inputType="text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
@@ -63,7 +63,7 @@
         android:hint="asmenskodas" />
 		        <EditText
         android:id="@+id/builetenio_nr"
-        android:inputType="textEmailAddress"
+        android:inputType="text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"

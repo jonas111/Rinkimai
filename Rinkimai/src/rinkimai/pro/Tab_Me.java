@@ -93,8 +93,10 @@ public class Tab_Me extends Activity {
 		   final StableArrayAdapter adapter = new StableArrayAdapter(this, android.R.layout.simple_list_item_1, list);
 		   history.setAdapter(adapter);
 		   
-		   if(VartotojoDuomenys.getName().isEmpty()){
+		   if(VartotojoDuomenys.getName() == null){
+
 			   name.setText("Sveiki Jusu duomenys dar nera pilnai uzpildyti, del to negalesite dalyvauti kaikuriuose balsavimuose");
+			   
 		   }
 		   else{
 			   name.setText("Sveiki "+ VartotojoDuomenys.getName());

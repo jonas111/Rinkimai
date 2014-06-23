@@ -131,9 +131,9 @@ public class Tab_Home extends Activity {
                 String email = c.getString(EMAIL);
                 String asm = c.getString(ASM_KOD);
                 String bil = c.getString(BIL_NR);
-                user_id = c.getString(ID);
+                String ids = c.getString(ID);
                 
-                VartotojoDuomenys.setUser_id(user_id);
+                //VartotojoDuomenys.setUser_id(user_id);
                 SQLiteCommandCenter.ijungtiAutentifikacija();
                 
                 // creating new HashMap
@@ -144,6 +144,7 @@ public class Tab_Home extends Activity {
                 map.put(EMAIL, email);
                 map.put(ASM_KOD, asm);
                 map.put(BIL_NR, bil);
+                map.put(ID, ids);
                
                 vartotojai.add(map);
              
@@ -205,7 +206,10 @@ public void updateJSONdata2() {
 			 String a = vartotojai.get(i).get(NAME);
 			 String b = vartotojai.get(i).get(SURENAME);
 			 String c = vartotojai.get(i).get(EMAIL);
-			 if(VartotojoDuomenys.getEmail().equals(c)) SayHello(a, b, c);
+			 if(Home.thisUser.equals(c)){
+					SayHello(a, b, c); 
+				 	this.user_id = vartotojai.get(i).get(ID);
+				 } 
 		 }
 	 }
 	 

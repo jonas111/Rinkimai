@@ -124,7 +124,14 @@ public class Tab_Vote extends Activity {
 	        }
 	        }
 	        else {
+	        	try
+	        	{
 	        	balsavimuSarasas = SQLiteCommandCenter.getTableBalsavimai();
+	        	}
+	        	catch(Exception e)
+	        	{
+	        		e.printStackTrace();
+	        	}
 			}
 	    }
 	 

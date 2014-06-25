@@ -208,7 +208,13 @@ public void updateJSONdata2() {
 			 if(VartotojoDuomenys.getEmail().equals(c)){
 				SayHello(a, b, c); 
 			 	this.user_id = vartotojai.get(i).get(ID);
-                VartotojoDuomenys.setUser_id(user_id);
+			 	VartotojoDuomenys.setAsm_kod(vartotojai.get(i).get(ASM_KOD));
+			 	VartotojoDuomenys.setBil_nr(vartotojai.get(i).get(BIL_NR));
+			 	VartotojoDuomenys.setEmail(vartotojai.get(i).get(EMAIL));
+			 	VartotojoDuomenys.setName(vartotojai.get(i).get(NAME));
+			 	VartotojoDuomenys.setSurename(vartotojai.get(i).get(SURENAME));
+			 	VartotojoDuomenys.setUser_id(vartotojai.get(i).get(ID));
+			 	SQLiteCommandCenter.naujiVartotojoDuomenys();
                 SQLiteCommandCenter.ijungtiAutentifikacija();
 			 } 
 //			 if(Home.thisUser.equals(c)){

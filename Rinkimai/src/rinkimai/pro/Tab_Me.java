@@ -115,7 +115,7 @@ public class Tab_Me extends Activity {
 		{
 			
 			List<NameValuePair> params1 = new ArrayList<NameValuePair>();
-			params1.add(new BasicNameValuePair("user_id", VartotojoDuomenys.getUser_id()));
+			params1.add(new BasicNameValuePair("vart_id", VartotojoDuomenys.getUser_id()));
 			istrauktiDuomenys = new JSONParser().makeHttpRequest(URL, "POST",params1);
 			try {
 				SQLiteCommandCenter.balsaiJsonToSqlite(istrauktiDuomenys);
@@ -186,14 +186,14 @@ public class Tab_Me extends Activity {
 			  
 			   builder.setView(maView);
 			  
-			   final EditText username = (EditText) maView.findViewById(R.id.username);
-			   username.setText(VartotojoDuomenys.getEmail());
-			   final EditText password = (EditText) maView.findViewById(R.id.password);
-			   password.setText(VartotojoDuomenys.getPassword());
-			   final EditText name = (EditText) maView.findViewById(R.id.name);
-			   name.setText(VartotojoDuomenys.getName());
-			   final EditText surename = (EditText) maView.findViewById(R.id.surename);
-			   surename.setText(VartotojoDuomenys.getSurename());
+//			   final EditText username = (EditText) maView.findViewById(R.id.username);
+//			   username.setText(VartotojoDuomenys.getEmail());
+//			   final EditText password = (EditText) maView.findViewById(R.id.password);
+//			   password.setText(VartotojoDuomenys.getPassword());
+//			   final EditText name = (EditText) maView.findViewById(R.id.name);
+//			   name.setText(VartotojoDuomenys.getName());
+//			   final EditText surename = (EditText) maView.findViewById(R.id.surename);
+//			   surename.setText(VartotojoDuomenys.getSurename());
 			   final EditText asmenskodas = (EditText) maView.findViewById(R.id.asmenskodas);
 			   asmenskodas.setText(VartotojoDuomenys.getAsm_kod());
 			   final EditText builetenio_nr = (EditText) maView.findViewById(R.id.builetenio_nr);
@@ -205,18 +205,18 @@ public class Tab_Me extends Activity {
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
 					// TODO Auto-generated method stub
-					if(!username.getText().toString().isEmpty()){
-					VartotojoDuomenys.setEmail(username.getText().toString());
-					}
-					if(!password.getText().toString().isEmpty()){
-					VartotojoDuomenys.setPassword(password.getText().toString());
-					}
-					if(!name.getText().toString().isEmpty()){
-					VartotojoDuomenys.setName(name.getText().toString());
-					}
-					if(!surename.getText().toString().isEmpty()){
-					VartotojoDuomenys.setSurename(surename.getText().toString());
-					}
+//					if(!username.getText().toString().isEmpty()){
+//					VartotojoDuomenys.setEmail(username.getText().toString());
+//					}
+//					if(!password.getText().toString().isEmpty()){
+//					VartotojoDuomenys.setPassword(password.getText().toString());
+//					}
+//					if(!name.getText().toString().isEmpty()){
+//					VartotojoDuomenys.setName(name.getText().toString());
+//					}
+//					if(!surename.getText().toString().isEmpty()){
+//					VartotojoDuomenys.setSurename(surename.getText().toString());
+//					}
 					if(!asmenskodas.getText().toString().isEmpty()){
 					VartotojoDuomenys.setAsm_kod(asmenskodas.getText().toString());
 					}

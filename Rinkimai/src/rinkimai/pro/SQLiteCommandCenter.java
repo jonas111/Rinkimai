@@ -260,7 +260,7 @@ public class SQLiteCommandCenter extends SQLiteOpenHelper
 
                 ContentValues eilutesReiksmes = new ContentValues(4);
                 
-                eilutesReiksmes.put("vart_id", eilut.getInt("vart_id"));
+                eilutesReiksmes.put("vart_id", eilut.getString("vart_id"));
                 eilutesReiksmes.put("bals_id",eilut.getString("bals_id"));
                 eilutesReiksmes.put("ats_id", eilut.getString("ats_id"));
                 eilutesReiksmes.put(timestamp, eilut.getString(timestamp));
@@ -292,7 +292,8 @@ public class SQLiteCommandCenter extends SQLiteOpenHelper
 		db.execSQL("CREATE TABLE IF NOT EXISTS balsai ("
 				+ "vart_id text NOT NULL,"
 				+ "bals_id int(11) NOT NULL,"
-				+ "ats_id int(11) NOT NULL);");
+				+ "ats_id int(11) NOT NULL,"
+				+ "time_stamp DATETIME NOT NULL);");
 		
 		db.execSQL("CREATE TABLE IF NOT EXISTS balsavimai ("
 				+ "id int(11),"

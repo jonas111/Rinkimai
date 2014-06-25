@@ -1,47 +1,49 @@
 package rinkimai.pro;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
-import android.util.DisplayMetrics;
-import android.view.MotionEvent;
-import android.view.View;
-import android.webkit.WebSettings;
-import android.webkit.WebView;
-import android.webkit.WebViewClient;
+import android.view.Menu;
+import android.app.FragmentManager;
 
-public class Tab_Stats extends Activity {
-	
-	protected void onCreate(Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.tab_stats);
-		
-		final WebView myWebView = (WebView) findViewById(R.id.webview); //sukuriamas laukas, kuris atvaizduoja web puslapi.
-		WebSettings webSettings = myWebView.getSettings(); //igalina nustatymus WebView klasei.
-		webSettings.setJavaScriptEnabled(true); //ijungia JavaScript.
-		myWebView.loadUrl("http://rinkimai2014.coxslot.com/webservisas/gaga.php"); //atidaro stats.php
-		
-		myWebView.setWebViewClient(new WebViewClient(){ //myWebView implementacija.
+public class Tab_Stats extends Activity implements FragmentListView.OnSiteSelectedListener{
 
-	        @Override
-	        public void onPageFinished(WebView view, String url) { //randa grafiko centro koordinates, kai baigia krauti puslapi.
-	            // TODO Auto-generated method stub
-	        	DisplayMetrics displaymetrics = new DisplayMetrics(); //struktura reikalinga rasti ekrano matmenims.
-	    		getWindowManager().getDefaultDisplay().getMetrics(displaymetrics); //randa ekrano matmenis.
-	    		int height = displaymetrics.heightPixels; //aukstis
-	    		int width = displaymetrics.widthPixels; //plotis
-	            super.onPageFinished(view, url); //pranesa, kada puslapis buvo baigtas krauti.
-	            myWebView.scrollTo((width/48*9), height); // nustumia grafika i norima pozicija.
-	        }
+    FragmentWebView web;
+    FragmentListView list;
+    FragmentManager manager;
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.tab_stats);
+        manager = getFragmentManager();
+        list = (FragmentListView) manager.findFragmentById(R.id.fragment1);
+        list.setRefrence(this);
+    }
 
-	    }
-	    );
-		
-		myWebView.setOnTouchListener(new View.OnTouchListener() { //iskvieciamas callback'as, kai palieciamas web puslapis.
 
-		    public boolean onTouch(View v, MotionEvent event) { //listeneris pasileidzia dar pries palieciant ekrana.
-		      return (event.getAction() == MotionEvent.ACTION_MOVE); //neleidzia pajudinti puslapio.
-		    }
-		});
-	}
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.layout.layout_home, menu);
+        return true;
+    }
+
+    @Override
+    public void onSiteSelected(int i) {
+
+        web = (FragmentWebView) manager.findFragmentById(R.id.fragment2);
+        // Check for landscape mode
+        if (web!= null && web.isVisible())
+        {
+            web.setNewPage(i);
+        }
+        else
+        {
+            Intent intent = new Intent(this , FragmentSupport.class);
+            intent.putExtra("index", i);
+            startActivity(intent);
+        }
+    }
+
 }

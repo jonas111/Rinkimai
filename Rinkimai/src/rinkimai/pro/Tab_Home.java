@@ -238,7 +238,7 @@ public void updateJSONdata2() {
 		 LinearLayout panele = (LinearLayout) findViewById(R.id.panele5);
 		 TextView tt = new TextView(getApplicationContext());
 		 tt.setText("Iki "+pav+" liko "+days+ " dienos ir "+hours+" valandos.");
-		 tt.setHeight(25);
+		 tt.setPadding(0, 0, 0, 10);
 		 tt.setGravity(Gravity.CENTER);
 		 tt.setTextColor(Color.GREEN);
 		 tt.setTextSize(16);
